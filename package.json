@@ -1,0 +1,30 @@
+{
+  "name": "ai-img-recog",
+  "version": "1.0.0",
+  "description": "AI-powered image recognition",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deasydoesit/ai-img-recog.git"
+  },
+  "keywords": [
+    "AI",
+    "visual",
+    "analysis",
+    "image",
+    "recognition"
+  ],
+  "author": "Abi Prabash, Christina Rust, Marcus Salazar, Darwin Rinderer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deasydoesit/ai-img-recog/issues"
+  },
+  "homepage": "https://github.com/deasydoesit/ai-img-recog#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
