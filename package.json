@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "AI-powered image recognition",
   "main": "server.js",
+  "proxy": "http://localhost:3001/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -13,10 +17,8 @@
   },
   "keywords": [
     "AI",
-    "visual",
-    "analysis",
-    "image",
-    "recognition"
+    "visual analysis",
+    "image recognition"
   ],
   "author": "Abi Prabash, Christina Rust, Marcus Salazar, Darwin Rinderer",
   "license": "MIT",
@@ -25,6 +27,10 @@
   },
   "homepage": "https://github.com/deasydoesit/ai-img-recog#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "concurrently": "^3.6.0",
+    "create-react-app": "^1.5.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.4",
+    "path": "^0.12.7"
   }
 }
