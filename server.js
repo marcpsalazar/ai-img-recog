@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === "production") {
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
-  }
+}
 
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/mern",
@@ -18,6 +18,8 @@ mongoose.connect(
     useMongoClient: true
   }
 );
+
+require("./routes/api-routes.js")(app);
 
 app.listen(PORT, function () {
     console.log("App listening on PORT: " + PORT);
