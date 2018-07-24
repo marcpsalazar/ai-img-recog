@@ -7,7 +7,7 @@ class TestImageSubmit extends Component {
     selectedFile: null
   }
 
-  fileChangedHandler = event => {
+  fileChangedHandler = event => { 
     this.setState({selectedFile: event.target.files[0]});
   }
   
