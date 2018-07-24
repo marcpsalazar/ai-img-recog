@@ -1,9 +1,17 @@
 require("dotenv").config(); 
-const fs = require('fs');
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const multer = require('multer');
 const VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+const db = require("../models");
+const mongoose = require('mongoose');
+
+
+// Initialize Mongo
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/leafy";
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+//---*
 
 // Initiaize Watson Visual Recognition
 const visualRecognition = new VisualRecognitionV3({
@@ -61,6 +69,15 @@ module.exports = function (app) {
               console.log(err);
             else
               console.log(JSON.stringify(response, null, 2));
+              let result = {};
+              result.path = path;
+              db.Tree.create(result)
+                .then(function(dbTree) {
+                    console.log(dbTree);
+                })
+                .catch(function(err) {
+                    return res.json(err);
+                });
           });
     });
 
