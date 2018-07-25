@@ -1,5 +1,5 @@
 import React from "react";
-import "./LogOut.css";
+import "./LogOutBtn.css";
 
 const LogOutBtn = props => (
 
