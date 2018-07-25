@@ -43,7 +43,7 @@ let upload = multer({
         }
     })
 });
-//--*
+//---*
 
 module.exports = function (app) {
 
@@ -62,22 +62,32 @@ module.exports = function (app) {
             classifier_ids: classifier_ids,
             threshold: threshold
         };
-        //--*
+        //---*
 
         visualRecognition.classify(params, function(err, response) { // Watson request
             if (err)
               console.log(err);
-            else
+            else //get Watson results back
               console.log(JSON.stringify(response, null, 2));
-              let result = {};
-              result.path = path;
-              db.Tree.create(result)
-                .then(function(dbTree) {
-                    console.log(dbTree);
-                })
-                .catch(function(err) {
-                    return res.json(err);
-                });
+              let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
+              if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
+                return res.send("Image not recognized");
+              } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
+              // Mongo storage
+                let result = {};
+                result.path = path;
+                db.Tree.create(result)
+                    .then(function(dbTree) {
+                        console.log(dbTree);
+                        res.send(dbTree);
+                    })
+                    .catch(function(err) {
+                        return res.json(err);
+                    });
+              //---*
+                } else { // If there are more than one tree types identified, ask client for help.
+                    res.send("Please pick one of these images");
+                }
           });
     });
 
