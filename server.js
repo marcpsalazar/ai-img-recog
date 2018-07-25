@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3001;
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -18,7 +17,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/mern",
+  process.env.MONGODB_URI || "mongodb://localhost/leafy",
   { 
     useNewUrlParser: true 
   }
