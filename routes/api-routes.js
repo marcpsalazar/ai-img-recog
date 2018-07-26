@@ -37,7 +37,7 @@ let upload = multer({
         bucket: "leafy-me/public",
         key: function (req, file, cb) {
             //console.log(file);
-            let newImage = file.fieldname + Date.now() + ".jpg";
+            let newImage = file.fieldname + Date.now() + ".png";
             path += newImage;
             cb(null, newImage);
         }
