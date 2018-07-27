@@ -91,7 +91,7 @@ class TestImageSubmit extends Component {
       return;
     }
     this.setState({
-      cropResult: this.cropper.getCroppedCanvas().toDataURL('image/jpeg'),
+      cropResult: this.cropper.getCroppedCanvas({height: 333}).toDataURL('image/jpeg', 0.9),
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "block",
@@ -123,7 +123,7 @@ class TestImageSubmit extends Component {
         />
         <div style={{display: this.state.displayImageCropper}}>
           <Cropper
-            style={{ height: 400, width: '50%' }}
+            style={{ height: 300, width: '50%' }}
             aspectRatio={1 / 1}
             guides={false}
             src={this.state.src}
