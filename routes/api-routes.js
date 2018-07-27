@@ -29,14 +29,13 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
-let path = "https://s3.amazonaws.com/leafy-me/public/";
-
 let upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: "leafy-me/public",
         key: function (req, file, cb) {
-            //console.log(file);
+            console.log(file);
+            let path = "https://s3.amazonaws.com/leafy-me/public/";
             let newImage = file.fieldname + Date.now() + ".png";
             path += newImage;
             cb(null, newImage);
@@ -75,7 +74,7 @@ module.exports = function (app) {
               } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
               // Mongo storage
                 let result = {};
-                result.path = path;
+                result.path = image_url;
                 db.Tree.create(result)
                     .then(function(dbTree) {
                         console.log(dbTree);
