@@ -49,7 +49,7 @@ class TestImageSubmit extends Component {
         displaySubmit: "none"});
   }
   
-  // Image upload (to client) handler
+  // Function to handle image upload to server 
   uploadHandler = () => { 
 
     // If there's no cropped file, throw error
@@ -84,14 +84,14 @@ class TestImageSubmit extends Component {
     reader.readAsDataURL(files[0]);
   }
 
-  // Function to crop image
+  // Function to cropped image
   cropImage = event => {
     event.preventDefault();
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
-      cropResult: this.cropper.getCroppedCanvas().toDataURL(),
+      cropResult: this.cropper.getCroppedCanvas().toDataURL('image/jpeg'),
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "block",
@@ -99,6 +99,7 @@ class TestImageSubmit extends Component {
     });
   }
 
+  // Function to create file from cropped image and upload
   handleImageUpload = event => {
     event.preventDefault();
     const cropBase64 = this.state.cropResult;

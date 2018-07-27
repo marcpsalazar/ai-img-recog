@@ -36,7 +36,7 @@ let upload = multer({
         key: function (req, file, cb) {
             console.log(file);
             let path = "https://s3.amazonaws.com/leafy-me/public/";
-            let newImage = file.fieldname + Date.now() + ".png";
+            let newImage = file.fieldname + Date.now() + ".jpg";
             path += newImage;
             cb(null, newImage);
         }
