@@ -7,18 +7,29 @@ class TestImageSubmit extends Component {
     selectedFile: null
   }
 
-  fileChangedHandler = event => {
+  fileChangedHandler = event => { 
     this.setState({selectedFile: event.target.files[0]});
   }
+
+  resetForm = () => { // Function to reset image submission form
+    document.getElementById("leaf-submit").reset();
+    this.setState({selectedFile: null});
+  }
   
-  uploadHandler = () => { //image upload handler
+  uploadHandler = event => { //image upload handler
+    event.preventDefault();
     if (!this.state.selectedFile) { //if there's no file, throw error
       alert("Please provide a photo")
     } else { //otherwise submit file to server
       const formData = new FormData()
       formData.append('photo', this.state.selectedFile, this.state.selectedFile.name);
-      API.postImage(formData);
-      this.setState({selectedFile: null});
+
+      API.postImage(formData) 
+        .then(function(res) {
+          console.log(res.data);
+      });
+
+      this.resetForm();
     }
   }
 
