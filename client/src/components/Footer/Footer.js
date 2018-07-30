@@ -3,8 +3,8 @@ import "./Footer.css";
 
 const Footer = props => (
     
-    <div>
-        <p>Footer!</p>
+    <div className="footer">
+        <p className="copyright">&copy;Leafy 2018</p>
     </div>
 );
 

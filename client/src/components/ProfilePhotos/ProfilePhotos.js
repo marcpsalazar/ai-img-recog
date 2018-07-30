@@ -3,7 +3,7 @@ import "./ProfilePhotos.css";
 
 const ProfilePhotos = props => (
     
-    <div>
+    <div className="submittedPhotos">
         <p>Previously submitted photos</p>
     </div>
 );

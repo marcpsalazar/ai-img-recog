@@ -12,12 +12,14 @@ class Landing extends Component {
   render() {
     return (
       <Container fluid>
+      <div className="background">
 
         <Header />
 
         <Jumbotron />
 
         <Footer />
+      </div>  
 
       </Container>
     );
