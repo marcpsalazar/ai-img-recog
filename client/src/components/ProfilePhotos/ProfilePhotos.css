@@ -1,0 +1,5 @@
+.submittedPhotos {
+    min-height: 200px;
+    border: solid 3px green;
+    margin-bottom: 25px;
+}
