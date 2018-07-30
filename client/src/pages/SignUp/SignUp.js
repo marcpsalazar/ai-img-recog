@@ -5,9 +5,6 @@ import "./SignUp.css";
 // import SubmitBtn from "./components/SubmitBtn";
 import Input from "../../components/Input";
 
-
-
-
 class SignUp extends Component {
     constructor(props) {
         super(props);

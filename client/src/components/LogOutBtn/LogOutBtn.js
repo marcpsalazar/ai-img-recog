@@ -5,7 +5,7 @@ import "./LogOutBtn.css";
 const LogOutBtn = props => (
 
     <Link to="/">
-        <button type="button" className="btn btn-success">
+        <button id="logout" type="button" className="btn btn-success">
             Log Out
         </button>
     </Link>

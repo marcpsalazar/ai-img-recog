@@ -1,3 +1,10 @@
 .jumbotron {
     text-align: center;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    border: solid 3px green;
+    font-family: 'Fredericka the Great', cursive;
+    /* background-color: #fdf5dc; */
 }
