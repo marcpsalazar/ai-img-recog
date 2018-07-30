@@ -19,7 +19,7 @@ class Landing extends Component {
 
         <Footer />
 
-      </Container>    
+      </Container>
     );
   }
 }

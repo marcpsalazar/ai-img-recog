@@ -15,18 +15,12 @@ const Jumbotron = props => (
       <p>Here are some directions.</p>
 
       < LogInBtn >
-        Log 
+        Log
       </ LogInBtn>
 
       < SignUpBtn >
         Sign In
       </ SignUpBtn>
-
-      <Switch>
-      <Route path='/signin' component={SignIn}/>
-      <Route path='/signup' component={SignUp}/>
-    </Switch>
-
     </div>
 );
 
