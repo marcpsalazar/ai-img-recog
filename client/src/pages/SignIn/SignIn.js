@@ -4,7 +4,11 @@ import "./SignIn.css";
 // import Footer from "../components/Footer";
 // import SubmitBtn from "./components/SubmitBtn";
 import Input from "../../components/Input";
-
+import {
+  getFromStorage,
+  setInStorage,
+} from '../../utils/storage';
+import 'whatwg-fetch';
 
 
 
@@ -12,21 +16,80 @@ class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: ''
+            isLoading: true,
+            token: '',
+            signInError: '',
+            signInUser: '',
+            signInPass: ''
         }
+
+        this.HandleInputChangeSignInPass = this.HandleInputChangeSignInPass.bind(this);
+        this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
     }
-    onChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value,
-        });
+    HandleInputChangeSignInUser(event) {
+      this.setState({
+        signInUser: event.target.value
+
+      })
     }
 
-    onSubmit = event => {
-        event.preventDefault();
+    HandleInputChangeSignInPass(event) {
+      this.setState({
+        signInPass: event.target.value
+
+      })
+    }
+
+    onSignIn() {
+      const {
+        signInUser,
+        signInPass
+      } = this.state
+
+      this.setState({
+      isLoading: true,
+      })
+
+      fetch('/api/account/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: signInUser,
+          password: signInPass
+        })
+      }).then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            setInStorage('the_main-app', { token: json.token });
+            this.setState({
+              signInError: json.message,
+              isLoading: false,
+              signInUser: '',
+              signInPass: '',
+              token: json.token
+            })
+          }  else {
+            this.setState({
+              signInError: json.message,
+              isLoading: false
+            })
+          }
+        })
     }
 
     render() {
+      const {
+        isLoading,
+        token,
+        signInError,
+        signInUser,
+        signInPass,
+        signUpUser,
+        signUpError,
+        signUpPass
+      } = this.state;
         return (
             <div>
 
@@ -34,18 +97,17 @@ class SignIn extends Component {
                 <form className="signIn-form">
                     <h3 className="signin-heading"> Hello </h3>
                     <Input
-                        name='email'
-                        placeholder='Email'
-                        onChange={event => this.onChange(event)}
-                        value={this.state.email} />
+                        type="text"
+                        placeholder="Username"
+                        value={signInUser}
+                        onChange={this.HandleInputChangeSignInUser}/>
                     <Input
-                        name='password'
-                        placeholder='Password'
-                        type='password'
-                        onChange={event => this.onChange(event)}
-                        value={this.state.password} />
+                        type="password"
+                        placeholder="Password"
+                        value={signInPass}
+                        onChange={this.HandleInputChangeSignInPass}/>
                     <br />
-                    {/* <SubmitBtn /> */}
+                    <button onClick={this.onSignIn}>Sign In</button>
                 </form>
                 {/* <Footer /> */}
             </div>
@@ -55,4 +117,3 @@ class SignIn extends Component {
 }
 
 export default SignIn;
-
