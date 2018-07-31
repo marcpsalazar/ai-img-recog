@@ -1,0 +1,11 @@
+.footer {
+    background-color: #0c7c30;
+    height: 75px;
+    text-align: center;
+    border-top: solid 3px darkgray;
+}
+
+.copyright {
+    padding-top: 35px;
+    color: white;
+}
