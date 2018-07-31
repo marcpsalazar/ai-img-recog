@@ -1,9 +1,9 @@
-require("dotenv").config();
+require('dotenv').config();
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const multer = require('multer');
 const VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
-const db = require("../models");
+const db = require('../models');
 const mongoose = require('mongoose');
 
 
@@ -29,14 +29,13 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
-let path = "https://s3.amazonaws.com/leafy-me/public/";
-
 let upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: "leafy-me/public",
         key: function (req, file, cb) {
-            //console.log(file);
+            console.log(file);
+            let path = "https://s3.amazonaws.com/leafy-me/public/";
             let newImage = file.fieldname + Date.now() + ".jpg";
             path += newImage;
             cb(null, newImage);
@@ -53,9 +52,15 @@ module.exports = function (app) {
         console.log(req.file.location); // The image file is availbe on AWS, specified by req.file.location
 
         // Set up Watson parameters
+<<<<<<< HEAD
         let image_url =  req.file.location;
         const classifier_ids = ["trees_1995546525"];
         const threshold = 0.6;
+=======
+        let image_url =  req.file.location;
+        const classifier_ids = ["trees_447821576"];
+        const threshold = 0.2;
+>>>>>>> master
 
         let params = {
             url: image_url,
@@ -65,25 +70,31 @@ module.exports = function (app) {
         //---*
 
         visualRecognition.classify(params, function(err, response) { // Watson request
-            if (err)
+            if (err) {
               console.log(err);
+            }
             else //get Watson results back
               console.log(JSON.stringify(response, null, 2));
               let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
               if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
-                return res.send("Image not recognized");
+                res.send("Image not recognized");
               } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
               // Mongo storage
                 let result = {};
-                result.path = path;
-                db.Tree.create(result)
-                    .then(function(dbTree) {
-                        console.log(dbTree);
-                        res.send(dbTree);
+                result.path = image_url;
+                result.name = trees[0].class;
+                db.Tree.find({name: result.name})
+                    .then(function(tree) {
+                        result.sciName = tree[0].sciName;
+                        result.range = tree[0].range;
+                        db.Post.create(result)
+                            .then(function(dbPost) {
+                                res.send(dbPost);
+                            })
+                            .catch(function(err) {
+                                return res.json(err);
+                            });
                     })
-                    .catch(function(err) {
-                        return res.json(err);
-                    });
               //---*
                 } else { // If there are more than one tree types identified, ask client for help.
                     res.send("Please pick one of these images");
