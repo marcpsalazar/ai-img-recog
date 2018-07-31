@@ -46,237 +46,235 @@ let upload = multer({
 
 module.exports = function (app) {
 
-    // Route for image upload to AWS, Watson processing, etc.
-    app.post("/api/image/image-upload", upload.single('photo'), function (req, res, next) {
+  // Route for image upload to AWS, Watson processing, etc.
+  app.post("/api/image/image-upload", upload.single('photo'), function (req, res, next) {
 
-        let user_id = req.body.token; 
+      let user_id = req.body.user_id; 
+      console.log(req.body);
+      // Set up Watson parameters
 
-        // Set up Watson parameters
+      let image_url =  req.file.location;
+      const classifier_ids = ["trees_447821576"];
+      const threshold = 0.6;
 
-        let image_url =  req.file.location;
-        const classifier_ids = ["trees_447821576"];
-        const threshold = 0.6;
+      let params = {
+          url: image_url,
+          classifier_ids: classifier_ids,
+          threshold: threshold
+      };
+      //---*
 
-        let params = {
-            url: image_url,
-            classifier_ids: classifier_ids,
-            threshold: threshold
-        };
-        //---*
-
-        visualRecognition.classify(params, function(err, response) { // Watson request
-            if (err) {
-              console.log(err);
-            }
-            else //get Watson results back
-              console.log(JSON.stringify(response, null, 2));
-              let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
-              if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
-                res.send("Image not recognized");
-              } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
-              // Mongo storage
-                let result = {};
-                result.path = image_url;
-                result.name = trees[0].class;
-                db.Tree.find({name: result.name})
-                    .then(function(tree) {
-                        result.user_id = user_id;
-                        result.sciName = tree[0].sciName;
-                        result.range = tree[0].range;
-                        db.Post.create(result)
-                            .then(function(dbPost) {
-                                console.log(dbPost)
-                                res.send(dbPost);
-                            })
-                            .catch(function(err) {
-                                return res.json(err);
-                            });
-                    })
-              //---*
-                } else { // If there are more than one tree types identified, ask client for help.
-                    res.send("Please pick one of these images");
-                }
-          });
-    });
+      visualRecognition.classify(params, function(err, response) { // Watson request
+          if (err) {
+            console.log(err);
+          }
+          else //get Watson results back
+            console.log(JSON.stringify(response, null, 2));
+            let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
+            if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
+              res.send("Image not recognized");
+            } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
+            // Mongo storage
+              let result = {};
+              result.path = image_url;
+              result.name = trees[0].class;
+              db.Tree.find({name: result.name})
+                  .then(function(tree) {
+                      result.user_id = user_id;
+                      result.sciName = tree[0].sciName;
+                      result.range = tree[0].range;
+                      db.Post.create(result)
+                          .then(function(dbPost) {
+                              console.log(dbPost)
+                              res.send(dbPost);
+                          })
+                          .catch(function(err) {
+                              return res.json(err);
+                          });
+                  })
+            //---*
+              } else { // If there are more than one tree types identified, ask client for help.
+                  res.send("Please pick one of these images");
+              }
+      });
+  });
 
 // --------------sign up------------------------------------------------------------
-    app.post('/api/account/signup', (req, res, next) => {
-      const {body} = req;
-      const {
-        username,
-        password
-      } = body;
+  app.post('/api/account/signup', (req, res, next) => {
+    const {body} = req;
+    const {
+      username,
+      password
+    } = body;
 
-      if (!username) {
-        return res.send({
-          success: false,
-          message: "Username required."
-        });
-      }
+    if (!username) {
+      return res.send({
+        success: false,
+        message: "Username required."
+      });
+    }
 
-      if (!password) {
-        return res.send({
-          success: false,
-          message: "Password required."
-        });
-      }
+    if (!password) {
+      return res.send({
+        success: false,
+        message: "Password required."
+      });
+    }
 
-      db.User.find({
-        username: username
-        }, (err, previousUsers) => {
-          if (err) {
-            return res.send({
-              success: false,
-              message: "Error"
-            });
-          } else if (previousUsers.length > 0) {
-            return res.send({
-              success: false,
-              message: "Username is taken."
-            })
-          }
-
-      const newUser = new db.User();
-        newUser.username = username;
-        newUser.password = newUser.generateHash(password);
-        newUser.save((err, user) => {
+    db.User.find({
+      username: username
+      }, (err, previousUsers) => {
         if (err) {
           return res.send({
             success: false,
-            message: "Server error"
+            message: "Error"
+          });
+        } else if (previousUsers.length > 0) {
+          return res.send({
+            success: false,
+            message: "Username is taken."
           })
         }
-        return res.send({
-          success: true,
-          message: "Sign Up successful!"
+
+        const newUser = new db.User();
+        newUser.username = username;
+        newUser.password = newUser.generateHash(password);
+        newUser.save((err, user) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: "Server error"
+            })
+          }
+          return res.send({
+            success: true,
+            message: "Sign Up successful!"
+          })
         })
       })
-      })
-    })
+  });
 
 // --------------sign in -----------------------------------------------------------
-app.post('/api/account/signin', (req, res, next) => {
-  const {body} = req;
-  const {
-    username,
-    password
-  } = body;
+  app.post('/api/account/signin', (req, res, next) => {
+    const {body} = req;
+    const {
+      username,
+      password
+    } = body;
 
-  if (!username) {
-    return res.send({
-      success: false,
-      message: "Username required."
-    });
-  }
-
-  if (!password) {
-    return res.send({
-      success: false,
-      message: "Password required."
-    });
-  }
-
-  db.User.find({
-    username: username
-  }, (err, users) => {
-  if (err) {
-    return res.send({
-      success: false,
-      message: "Server Error"
-    });
-  }
-  if (users.length != 1) {
-    return res.send({
-      success: false,
-      message: "Invalid"
-    })
-  }
-
-  const user = users[0];
-    if (!user.validPassword(password)) {
+    if (!username) {
       return res.send({
         success: false,
-        message: "Invalid"
-      })
+        message: "Username required."
+      });
     }
 
-  const userSession = new db.UserSession();
-    userSession.userId = user._id;
-    userSession.save((err, doc) => {
+    if (!password) {
+      return res.send({
+        success: false,
+        message: "Password required."
+      });
+    }
+
+    db.User.find({
+      username: username
+    }, (err, users) => {
       if (err) {
         return res.send({
           success: false,
           message: "Server Error"
         });
       }
-
-      return res.send({
-        success: true,
-        message: "Sign In successful",
-        token: doc._id
-      });
-  });
-  });
-
-})
-
-// --------------verify--------------------------------------------------------------
-app.get('/api/account/verify', (req, res, next) => {
-
-  const {query} = req;
-  const {token} = query;
-
-  db.UserSession.find({
-    _id: token,
-    isDeleted: false
-  }, (err, sessions) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: "Server Error"
-        })
-      }
-
-      if (sessions.length != 1) {
+      if (users.length != 1) {
         return res.send({
           success: false,
           message: "Invalid"
         })
       }
 
-      else {
+      const user = users[0];
+      if (!user.validPassword(password)) {
+        return res.send({
+          success: false,
+          message: "Invalid"
+        })
+      }
+
+      const userSession = new db.UserSession();
+      userSession.userId = user._id;
+      userSession.save((err, doc) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Server Error"
+          });
+        }
+        console.log(doc);
+        return res.send({
+          success: true,
+          message: "Sign In successful",
+          token: doc._id,
+          user_id: doc.userId
+        });
+      });
+    });
+  });
+
+// --------------verify--------------------------------------------------------------
+  app.get('/api/account/verify', (req, res, next) => {
+
+    const {query} = req;
+    const {token} = query;
+
+    db.UserSession.find({
+      _id: token,
+      isDeleted: false
+    }, (err, sessions) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Server Error"
+          })
+        }
+
+        if (sessions.length != 1) {
+          return res.send({
+            success: false,
+            message: "Invalid"
+          })
+        }
+
+        else {
+          return res.send({
+            success: true,
+            message: 'good'
+          })
+        }
+      })
+  })
+
+// ---------------logout-------------------------------------------------------------
+  app.get('/api/account/logout', (req, res, next) => {
+    const { query } = req;
+    const { token } = query;
+
+    db.UserSession.findOneAndUpdate({
+      _id: token,
+      isDeleted: false
+      }, {
+        $set:{isDeleted:true}
+      }, null, (err, sessions) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Server Error"
+          })
+        }
+
         return res.send({
           success: true,
           message: 'good'
         })
-      }
-    })
-})
-
-// ---------------logout-------------------------------------------------------------
-app.get('/api/account/logout', (req, res, next) => {
-  const { query } = req;
-  const { token } = query;
-
-  db.UserSession.findOneAndUpdate({
-    _id: token,
-    isDeleted: false
-    }, {
-      $set:{isDeleted:true}
-    }, null, (err, sessions) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: "Server Error"
-        })
-      }
-
-      return res.send({
-        success: true,
-        message: 'good'
       })
-    })
   })
-
-
 };

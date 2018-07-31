@@ -1,20 +1,15 @@
 import React, { Component } from "react";
-import "./Profile.css";
+import { Redirect } from "react-router";
+import { getFromStorage } from '../../utils/storage';
 import Container from "../../components/Container";
 import Header from "../../components/Header";
-import 'cropperjs/dist/cropper.css';
 import Cropper from 'react-cropper'
 import TestImageUpload from  "../../components/TestImageUpload";
 import ProfilePhotos from "../../components/ProfilePhotos";
 import Footer from "../../components/Footer";
-import LogOutBtn from "../../components/LogOutBtn";
-import {
-  getFromStorage,
-  setInStorage,
-  } from '../../utils/storage';
 import API from "../../utils/API";
-import {Route, Redirect} from "react-router";
-import SignIn from "../SignIn";
+import "./Profile.css";
+import 'cropperjs/dist/cropper.css';
 
 class Profile extends Component {
     constructor(props) {
@@ -22,6 +17,7 @@ class Profile extends Component {
       this.state = {
         isLoading: true,
         token: '',
+        user_id: '',
         selectedFile: null,
         croppedFile: null,
         src: null,
@@ -39,14 +35,16 @@ class Profile extends Component {
       console.log(obj)
       if (obj && obj.token) {
         const { token } = obj;
+        const { user_id } = obj;
 
         API.verify(token);
 
         this.setState ({
-            token,
-            isLoading: false,
-            fireRedirect: false
-          })
+          token,
+          user_id,
+          isLoading: false,
+          fireRedirect: false
+        });
       }
     }
 
@@ -62,11 +60,12 @@ class Profile extends Component {
       if (obj && obj.token) {
         const { token } = obj;
 
-        API.logout(token)
+        API.logOut(token)
         .then(json => {
           if (json.statusText==="OK") {
             this.setState({
               token: '',
+              user_id: '',
               isLoading: false
             })
           } else {
@@ -122,19 +121,17 @@ class Profile extends Component {
     uploadHandler = () => { 
       const obj = getFromStorage('the_main-app');
       // If there's no cropped file, throw error
-      if (!this.state.croppedFile && obj && obj.token) { 
+      if (!this.state.croppedFile) { 
         alert("Please provide a photo")
       } else { // Otherwise submit cropped file to server
-        const { token } = obj;
-
+        const { user_id } = obj;
         const formData = new FormData()
         formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
-        formData.append('token', token);
+        formData.append('user_id', user_id);
         API.postImage(formData) 
           .then(function(res) {
             console.log(res.data);
         });
-
         this.resetForm();
       }
     }
@@ -184,8 +181,6 @@ class Profile extends Component {
 
   render() {
     const {
-      isLoading,
-      token,
       fireRedirect
     } = this.state;
 
