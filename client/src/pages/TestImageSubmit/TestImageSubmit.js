@@ -38,7 +38,7 @@ class TestImageSubmit extends Component {
 
   // Function to reset image submission form
   resetForm = () => { 
-    document.getElementById("leaf-submit").reset();
+    document.getElementById("leaf-submit").reset();  
     this.setState({ selectedFile: null,
         croppedFile: null,
         src: null,
