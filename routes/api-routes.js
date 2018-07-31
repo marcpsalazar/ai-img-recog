@@ -53,7 +53,7 @@ module.exports = function (app) {
 
         // Set up Watson parameters
         let image_url =  req.file.location; 
-        const classifier_ids = ["test_1336517227"];
+        const classifier_ids = ["trees_447821576"];
         const threshold = 0.2;
 
         let params = { 
