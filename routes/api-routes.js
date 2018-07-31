@@ -53,11 +53,6 @@ module.exports = function (app) {
 
         // Set up Watson parameters
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> master
         let image_url =  req.file.location;
         const classifier_ids = ["trees_447821576"];
         const threshold = 0.6;
@@ -85,10 +80,12 @@ module.exports = function (app) {
                 result.name = trees[0].class;
                 db.Tree.find({name: result.name})
                     .then(function(tree) {
+                        result.user_id = user_id;
                         result.sciName = tree[0].sciName;
                         result.range = tree[0].range;
                         db.Post.create(result)
                             .then(function(dbPost) {
+                                console.log(dbPost)
                                 res.send(dbPost);
                             })
                             .catch(function(err) {
