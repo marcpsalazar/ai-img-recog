@@ -84,14 +84,14 @@ class TestImageSubmit extends Component {
     reader.readAsDataURL(files[0]);
   }
 
-  // Function to cropped image
+  // Function to crop image
   cropImage = event => {
     event.preventDefault();
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
     this.setState({
-      cropResult: this.cropper.getCroppedCanvas({height: 333}).toDataURL('image/jpeg', 0.9),
+      cropResult: this.cropper.getCroppedCanvas({height: 666}).toDataURL('image/jpeg'),
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "block",
@@ -133,7 +133,7 @@ class TestImageSubmit extends Component {
             zoomable={false}
           />
         </div>
-        <img style={{ width: '50%', display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
+        <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
       </div>
     );
   }
