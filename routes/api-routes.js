@@ -47,12 +47,17 @@ let upload = multer({
 module.exports = function (app) {
 
     // Route for image upload to AWS, Watson processing, etc.
-    app.post("/api/image-upload", upload.single('photo'), function (req, res, next) {
+    app.post("/api/image/image-upload", upload.single('photo'), function (req, res, next) {
 
         let user_id = req.body.token; 
 
         // Set up Watson parameters
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> master
         let image_url =  req.file.location;
         const classifier_ids = ["trees_447821576"];
         const threshold = 0.6;

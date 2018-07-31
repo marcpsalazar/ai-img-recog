@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {Route, Redirect} from "react-router";
 import "./SignUp.css";
-import Profile from "../Profile";
 import Input from "../../components/Input";
 import API from "../../utils/API";
 
