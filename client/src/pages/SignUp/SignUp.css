@@ -1,29 +1,36 @@
 .signUp-form {
     width: 500px;
-    height: 400px;
-    background-color: rgb(175, 235, 214);
-    border: rgb(97, 96, 96);
+    height: 350px;
+    background-color: rgba(83, 163, 37, 0.466);
+    border: rgb(34, 82, 30);
     border-style: solid;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
-  border-radius: 2%;
-
-
+  margin-bottom: 60px;
 }
 
 .form-group {
     padding: 25px;
+    border: rgb(7, 36, 7); 
 }
 
 .signup-heading {
-text-align: center;
-font-style: oblique;
-font-weight: bolder;
-padding: 10px;
-color: rgb(40, 83, 40); 
+    font-family: 'Cabin Sketch';
+    text-align: center;
+    font-style: oblique;
+    font-weight: bolder;
+    padding: 10px;
 }
 
-.form-control {
-    border: green;
+#signup {
+    margin-left:220px;
+    background-color: rgb(54, 131, 54);
+    color:white;
+}
+
+.background-image {
+    background-image: url("http://www.amazingwallpaperz.com/wp-content/uploads/Leaf-Free-Wallpapers.jpg");
+    background-size: cover;
+    height:80%;
 }
