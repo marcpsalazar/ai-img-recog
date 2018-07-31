@@ -3,7 +3,7 @@ import axios from "axios";
 export default {
 
   postImage: function(data) {
-    return axios.post("/api/image-upload", data);
+    return axios.post("/api/image/image-upload", data);
   },
 
   signUp: function(obj) {
@@ -14,8 +14,8 @@ export default {
     return axios.post('/api/account/signin', obj);
   },
 
-  logOut: function(obj) {
-    return axios.post('/api/account/logout', obj);
+  logOut: function(token) {
+    return axios.get('/api/account/logout?token=' + token);
   },
 
   verify: function(token) {
