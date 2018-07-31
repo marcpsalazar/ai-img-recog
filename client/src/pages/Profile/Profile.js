@@ -58,7 +58,7 @@ componentDidMount() {
     if (obj && obj.token) {
       const { token } = obj;
 
-      API.logout(token)
+      API.logOut(token)
       .then(json => {
         if (json.statusText==="OK") {
           this.setState({
