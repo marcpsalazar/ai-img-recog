@@ -2,14 +2,18 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const TreeSchema = new Schema({
+const PostSchema = new Schema({
+  path: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
   },
   sciName: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   },
   range: {
     type: String,
@@ -17,6 +21,6 @@ const TreeSchema = new Schema({
   }
 });
 
-const Tree = mongoose.model("Tree", TreeSchema);
+const Post = mongoose.model("Post", PostSchema);
 
-module.exports = Tree;
+module.exports = Post;
