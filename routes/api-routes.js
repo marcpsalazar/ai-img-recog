@@ -52,15 +52,15 @@ module.exports = function (app) {
         console.log(req.file.location); // The image file is availbe on AWS, specified by req.file.location
 
         // Set up Watson parameters
-<<<<<<< HEAD
+
         let image_url =  req.file.location;
         const classifier_ids = ["trees_1995546525"];
         const threshold = 0.6;
-=======
+
         let image_url =  req.file.location;
         const classifier_ids = ["trees_447821576"];
         const threshold = 0.2;
->>>>>>> master
+
 
         let params = {
             url: image_url,

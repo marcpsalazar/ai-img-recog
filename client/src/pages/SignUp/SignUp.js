@@ -79,7 +79,7 @@ class SignUp extends Component {
                     <button onClick={this.onSignUp}>Sign Up</button>
                 </form>
                 {fireRedirect && (
-                  <Redirect to={'/login'}/>
+                  <Redirect to={'/signin'}/>
                   )}
               </div>);
       }
