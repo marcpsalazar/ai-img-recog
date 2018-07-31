@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const multer = require('multer');
@@ -25,7 +25,7 @@ aws.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     region: 'us-east-1'
-});  
+});
 
 const s3 = new aws.S3();
 
@@ -52,11 +52,17 @@ module.exports = function (app) {
         console.log(req.file.location); // The image file is availbe on AWS, specified by req.file.location
 
         // Set up Watson parameters
-        let image_url =  req.file.location; 
+
+        let image_url =  req.file.location;
+        const classifier_ids = ["trees_1995546525"];
+        const threshold = 0.6;
+
+        let image_url =  req.file.location;
         const classifier_ids = ["trees_447821576"];
         const threshold = 0.2;
 
-        let params = { 
+
+        let params = {
             url: image_url,
             classifier_ids: classifier_ids,
             threshold: threshold
@@ -95,5 +101,184 @@ module.exports = function (app) {
                 }
           });
     });
+
+// --------------sign up------------------------------------------------------------
+    app.post('/api/account/signup', (req, res, next) => {
+      const {body} = req;
+      const {
+        username,
+        password
+      } = body;
+
+      if (!username) {
+        return res.send({
+          success: false,
+          message: "Username required."
+        });
+      }
+
+      if (!password) {
+        return res.send({
+          success: false,
+          message: "Password required."
+        });
+      }
+
+      db.User.find({
+        username: username
+        }, (err, previousUsers) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: "Error"
+            });
+          } else if (previousUsers.length > 0) {
+            return res.send({
+              success: false,
+              message: "Username is taken."
+            })
+          }
+
+      const newUser = new db.User();
+        newUser.username = username;
+        newUser.password = newUser.generateHash(password);
+        newUser.save((err, user) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Server error"
+          })
+        }
+        return res.send({
+          success: true,
+          message: "Sign Up successful!"
+        })
+      })
+      })
+    })
+
+// --------------sign in -----------------------------------------------------------
+app.post('/api/account/signin', (req, res, next) => {
+  const {body} = req;
+  const {
+    username,
+    password
+  } = body;
+
+  if (!username) {
+    return res.send({
+      success: false,
+      message: "Username required."
+    });
+  }
+
+  if (!password) {
+    return res.send({
+      success: false,
+      message: "Password required."
+    });
+  }
+
+  db.User.find({
+    username: username
+  }, (err, users) => {
+  if (err) {
+    return res.send({
+      success: false,
+      message: "Server Error"
+    });
+  }
+  if (users.length != 1) {
+    return res.send({
+      success: false,
+      message: "Invalid"
+    })
+  }
+
+  const user = users[0];
+    if (!user.validPassword(password)) {
+      return res.send({
+        success: false,
+        message: "Invalid"
+      })
+    }
+
+  const userSession = new db.UserSession();
+    userSession.userId = user._id;
+    userSession.save((err, doc) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Server Error"
+        });
+      }
+
+      return res.send({
+        success: true,
+        message: "Sign In successful",
+        token: doc._id
+      });
+  });
+  });
+
+})
+
+// --------------verify--------------------------------------------------------------
+app.get('/api/account/verify', (req, res, next) => {
+  const {query} = req;
+  const {token} = query;
+
+  db.UserSession.find({
+    _id: token,
+    isDeleted: false
+  }, (err, sessions) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Server Error"
+        })
+      }
+
+      if (sessions.length != 1) {
+        return res.send({
+          success: false,
+          message: "Invalid"
+        })
+      }
+
+      else {
+        return res.send({
+          success: true,
+          message: 'good'
+        })
+      }
+    })
+})
+
+// ---------------logout-------------------------------------------------------------
+app.get('/api/account/logout', (req, res, next) => {
+  const { query } = req;
+  const { token } = query;
+
+  db.UserSession.findOneAndUpdate({
+    _id: token,
+    isDeleted: false
+    }, {
+      $set:{isDeleted:true}
+    }, null, (err, sessions) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Server Error"
+        })
+      }
+
+      return res.send({
+        success: true,
+        message: 'good'
+      })
+    })
+  })
+
 
 };
