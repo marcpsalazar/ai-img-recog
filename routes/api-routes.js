@@ -113,7 +113,7 @@ module.exports = function (app) {
         });
       }
 
-      User.find({
+      db.User.find({
         username: username
         }, (err, previousUsers) => {
           if (err) {
@@ -128,7 +128,7 @@ module.exports = function (app) {
             })
           }
 
-      const newUser = new User();
+      const newUser = new db.User();
         newUser.username = username;
         newUser.password = newUser.generateHash(password);
         newUser.save((err, user) => {
@@ -168,7 +168,7 @@ app.post('/api/account/signin', (req, res, next) => {
     });
   }
 
-  User.find({
+  db.User.find({
     username: username
   }, (err, users) => {
   if (err) {
@@ -192,21 +192,21 @@ app.post('/api/account/signin', (req, res, next) => {
       })
     }
 
-  const userSession = new UserSession();
-  userSession.userId = user._id;
-  userSession.save((err, doc) => {
-    if (err) {
-      return res.send({
-        success: false,
-        message: "Server Error"
-      });
-    }
+  const userSession = new db.UserSession();
+    userSession.userId = user._id;
+    userSession.save((err, doc) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Server Error"
+        });
+      }
 
-    return res.send({
-      success: true,
-      message: "Sign In successful",
-      token: doc._id
-    });
+      return res.send({
+        success: true,
+        message: "Sign In successful",
+        token: doc._id
+      });
   });
   });
 
@@ -217,7 +217,7 @@ app.get('/api/account/verify', (req, res, next) => {
   const {query} = req;
   const {token} = query;
 
-  UserSession.find({
+  db.UserSession.find({
     _id: token,
     isDeleted: false
   }, (err, sessions) => {
@@ -249,7 +249,7 @@ app.get('/api/account/logout', (req, res, next) => {
   const { query } = req;
   const { token } = query;
 
-  UserSession.findOneAndUpdate({
+  db.UserSession.findOneAndUpdate({
     _id: token,
     isDeleted: false
     }, {

@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
     min: [6, "Must be at least 6 characters"]
   },
   isDeleted: {

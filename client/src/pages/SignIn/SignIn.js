@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import "./SignIn.css";
-// import Header from "../components/Header";
-// import Footer from "../components/Footer";
-// import SubmitBtn from "./components/SubmitBtn";
 import Input from "../../components/Input";
 import {
   getFromStorage,
   setInStorage,
 } from '../../utils/storage';
-import 'whatwg-fetch';
+import API from "../../utils/API";
+import Profile from "../Profile";
+import {Route, Redirect} from "react-router";
 
 
 
@@ -16,15 +15,15 @@ class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
             token: '',
-            signInError: '',
             signInUser: '',
-            signInPass: ''
+            signInPass: '',
+            fireRedirect: false
         }
 
         this.HandleInputChangeSignInPass = this.HandleInputChangeSignInPass.bind(this);
         this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
+        this.onSignIn = this.onSignIn.bind(this);
     }
     HandleInputChangeSignInUser(event) {
       this.setState({
@@ -40,60 +39,56 @@ class SignIn extends Component {
       })
     }
 
-    onSignIn() {
+    onSignIn(e) {
+      e.preventDefault()
       const {
         signInUser,
         signInPass
       } = this.state
 
-      this.setState({
-      isLoading: true,
-      })
+      let siObj = {
+        username: signInUser,
+        password: signInPass
+      }
 
-      fetch('/api/account/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: signInUser,
-          password: signInPass
-        })
-      }).then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            setInStorage('the_main-app', { token: json.token });
+      API.signIn(siObj)
+
+      .then(json => {
+        console.log(json)
+          if (json.statusText==="OK") {
+            console.log('storage method reached')
+            console.log(json.data.token)
+            setInStorage('the_main-app', { token: json.data.token });
             this.setState({
-              signInError: json.message,
+              signInError: json.data.message,
               isLoading: false,
               signInUser: '',
               signInPass: '',
-              token: json.token
+              token: json.data.token
             })
+            // console.log(this.state.token)
           }  else {
             this.setState({
               signInError: json.message,
               isLoading: false
             })
           }
+                        this.setState({fireRedirect: true});
+
         })
+
     }
 
     render() {
       const {
-        isLoading,
         token,
         signInError,
         signInUser,
         signInPass,
-        signUpUser,
-        signUpError,
-        signUpPass
+        fireRedirect
       } = this.state;
         return (
             <div>
-
-                {/* <Header /> */}
                 <form className="signIn-form">
                     <h3 className="signin-heading"> Hello </h3>
                     <Input
@@ -109,7 +104,9 @@ class SignIn extends Component {
                     <br />
                     <button onClick={this.onSignIn}>Sign In</button>
                 </form>
-                {/* <Footer /> */}
+                {fireRedirect && (
+                  <Redirect to={'/profile'}/>
+                  )}
             </div>
         );
     }

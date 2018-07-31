@@ -17,9 +17,9 @@ if (process.env.NODE_ENV === "production") {
 }
 
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/leafy",
-  { 
-    useNewUrlParser: true 
+  process.env.MONGODB_URI || "mongodb://localhost:27017/leafy",
+  {
+    useNewUrlParser: true
   }
 );
 

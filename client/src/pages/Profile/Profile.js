@@ -9,8 +9,11 @@ import LogOutBtn from "../../components/LogOutBtn";
 import {
   getFromStorage,
   setInStorage,
-} from '../../utils/storage';
-import 'whatwg-fetch';
+  } from '../../utils/storage';
+import API from "../../utils/API";
+import {Route, Redirect} from "react-router";
+import SignIn from "../SignIn";
+
 
 class Profile extends Component {
   constructor(props) {
@@ -18,13 +21,7 @@ class Profile extends Component {
 
 this.state = {
   isLoading: true,
-  token: '',
-  signUpError: '',
-  signInError: '',
-  signInUser: '',
-  signInPass: '',
-  signUpUser: '',
-  signUpPass: ''
+  token: ''
 };
 
 
@@ -32,50 +29,38 @@ this.logout = this.logout.bind(this);
 }
 
 componentDidMount() {
-  const obj = getFromStorage('the_main_app');
-  console.log(obj);
-
+  const obj = getFromStorage('the_main-app');
+  console.log(obj)
   if (obj && obj.token) {
-  const { token } = obj;
+    const { token } = obj;
 
-  fetch('/api/account/verify?token=' + token)
-  .then(res => res.json())
-  .then(json => {
-    if (json.success) {
-      this.setState({
+    API.verify(token);
+
+    this.setState ({
         token,
-        isLoading: false
+        isLoading: false,
+        fireRedirect: false
       })
-    } else {
-      this.setState({
-        isLoading: false
-      })
-    }
-  })
-
-  }else {
-  this.setState({
-    isLoading: false
-  })
   }
 }
 
 
-  logout() {
+
+  logout(e) {
+    e.preventDefault()
     this.setState({
       isLoading: true,
     });
 
     console.log("button clicked");
-    const obj = getFromStorage('the_main_app');
+    const obj = getFromStorage('the_main-app');
 
     if (obj && obj.token) {
       const { token } = obj;
 
-      fetch('/api/account/logout?token=' + token)
-      .then(res => res.json())
+      API.logout(token)
       .then(json => {
-        if (json.success) {
+        if (json.statusText==="OK") {
           this.setState({
             token: '',
             isLoading: false
@@ -92,6 +77,7 @@ componentDidMount() {
         isLoading: false
       })
     }
+    this.setState({fireRedirect: true});
   }
 
 
@@ -99,6 +85,7 @@ componentDidMount() {
     const {
       isLoading,
       token,
+      fireRedirect
     } = this.state;
 
     return (
@@ -110,9 +97,16 @@ componentDidMount() {
 
         <ProfilePhotos />
 
-        <LogOutBtn />
+        <button id="logout" type="button" className="btn btn-success"
+        onClick={this.logout}>
+            Log Out
+        </button>
 
         <Footer />
+
+      {fireRedirect && (
+        <Redirect to={'/signin'}/>
+        )}
 
       </Container>
     );
