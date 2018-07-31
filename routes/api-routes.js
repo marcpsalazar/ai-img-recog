@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const multer = require('multer');
@@ -25,7 +25,7 @@ aws.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     region: 'us-east-1'
-});  
+});
 
 const s3 = new aws.S3();
 
@@ -52,48 +52,48 @@ module.exports = function (app) {
         console.log(req.file.location); // The image file is availbe on AWS, specified by req.file.location
 
         // Set up Watson parameters
-        let image_url =  req.file.location; 
+        let image_url = req.file.location;
         const classifier_ids = ["trees_447821576"];
         const threshold = 0.2;
 
-        let params = { 
+        let params = {
             url: image_url,
             classifier_ids: classifier_ids,
             threshold: threshold
         };
         //---*
 
-        visualRecognition.classify(params, function(err, response) { // Watson request
+        visualRecognition.classify(params, function (err, response) { // Watson request
             if (err) {
-              console.log(err);
+                console.log(err);
             }
             else //get Watson results back
-              console.log(JSON.stringify(response, null, 2));
-              let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
-              if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
+                console.log(JSON.stringify(response, null, 2));
+            let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
+            if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
                 res.send("Image not recognized");
-              } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
-              // Mongo storage
+            } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
+                // Mongo storage
                 let result = {};
                 result.path = image_url;
                 result.name = trees[0].class;
-                db.Tree.find({name: result.name})
-                    .then(function(tree) {
+                db.Tree.find({ name: result.name })
+                    .then(function (tree) {
                         result.sciName = tree[0].sciName;
                         result.range = tree[0].range;
                         db.Post.create(result)
-                            .then(function(dbPost) {
+                            .then(function (dbPost) {
                                 res.send(dbPost);
                             })
-                            .catch(function(err) {
+                            .catch(function (err) {
                                 return res.json(err);
                             });
                     })
-              //---*
-                } else { // If there are more than one tree types identified, ask client for help.
-                    res.send("Please pick one of these images");
-                }
-          });
+                //---*
+            } else { // If there are more than one tree types identified, ask client for help.
+                res.send("Please pick one of these images");
+            }
+        });
     });
 
 };
