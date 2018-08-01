@@ -12,23 +12,24 @@ import "./Profile.css";
 import 'cropperjs/dist/cropper.css';
 
 class Profile extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        isLoading: true,
-        token: '',
-        user_id: '',
-        selectedFile: null,
-        croppedFile: null,
-        src: null,
-        cropResult: null,
-        displayImageCropper: "none",
-        displayCropButton: "none",
-        displayCroppedImage: "none",
-        displaySubmit: "none"
-      };
-      this.logout = this.logout.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      token: '',
+      user_id: '',
+      selectedFile: null,
+      croppedFile: null,
+      src: null,
+      cropResult: null,
+      displayImageCropper: "none",
+      displayCropButton: "none",
+      displayCroppedImage: "none",
+      displaySubmit: "none"
+    };
+    this.logout = this.logout.bind(this);
   }
+
   //Marcus 
     componentDidMount() {
       const obj = getFromStorage('the_main-app');
@@ -38,7 +39,7 @@ class Profile extends Component {
         const { user_id } = obj;
 
         API.verify(token);
-
+        this.loadTrees(user_id);
         this.setState ({
           token,
           user_id,
@@ -46,6 +47,14 @@ class Profile extends Component {
           fireRedirect: false
         });
       }
+    }
+
+    loadTrees = (id) => {
+      API.getTrees(id)
+        // .then(res =>
+        //   this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+        // )
+        // .catch(err => console.log(err));
     }
 
     logout(e) {
