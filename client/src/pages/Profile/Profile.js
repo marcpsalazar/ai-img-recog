@@ -53,15 +53,11 @@ class Profile extends Component {
   }
 
   loadTrees = (token) => {
-    console.log(this.state.trees);
-    console.log(typeof this.state.trees);
-    console.log(this.state.trees.length);
-    console.log(typeof this.state.trees.length);
     API.getTrees(token)
       .then(res => {
         console.log(res);
         this.setState({ trees: res.data });
-        console.log(this.state.trees);
+        console.log("hello");
       })
       .catch(err => console.log(err));
   }
