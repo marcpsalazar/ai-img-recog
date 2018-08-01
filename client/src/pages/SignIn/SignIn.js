@@ -11,14 +11,14 @@ import "./SignIn.css";
 
 class SignIn extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      token: '',
-      user_id: '',
-      signInUser: '',
-      signInPass: '',
-      fireRedirect: false
-    }
+      super(props);
+      this.state = {
+          token: '',
+          signInUser: '',
+          signInPass: '',
+          signInError: '',
+          fireRedirect: false
+      }
 
     this.HandleInputChangeSignInPass = this.HandleInputChangeSignInPass.bind(this);
     this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
@@ -52,26 +52,27 @@ class SignIn extends Component {
     API.signIn(siObj)
       .then(json => {
         console.log(json)
-        if (json.statusText === "OK") {
-          console.log('storage method reached');
+        if (json.data.success === true) {
           console.log(json.data.token);
           console.log(json.data);
-          setInStorage('the_main-app', { token: json.data.token, user_id: json.data.user_id });
+          setInStorage('the_main-app', { token: json.data.token });
           this.setState({
             signInError: json.data.message,
             isLoading: false,
             signInUser: '',
             signInPass: '',
-            token: json.data.token,
-            user_id: json.data.user_id
+            token: json.data.token
           });
+          this.setState({ fireRedirect: true });
         } else {
+          console.log(json.data.success);
           this.setState({
             signInError: json.message,
             isLoading: false
           })
+          this.setState({ signInError: true });
         }
-        this.setState({ fireRedirect: true });
+
       });
   }
 
@@ -82,33 +83,38 @@ class SignIn extends Component {
       fireRedirect
     } = this.state;
     return (
-      <Container fluid>
-        <div className="background-image">
-          <Header />
-          <form className="signIn-form">
-            <h1 className="signin-heading"> Hello </h1>
-            <Input
-              type="text"
-              placeholder="Username"
-              value={signInUser}
-              onChange={this.HandleInputChangeSignInUser} />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={signInPass}
-              onChange={this.HandleInputChangeSignInPass} />
-            <br />
-            <button type="button" className="btn btn-sucess" id="signin" onClick={this.onSignIn}>Sign In</button>
-          </form>
-          {fireRedirect && (
-            <Redirect to={'/profile'} />
-          )}
-          <Footer />
-        </div>
-      </Container>
+      <div>{
+        this.state.signInError ? <p id="error">Please enter correct credentials</p> : <br />
+      }
+        <Container fluid>
+          <div className="background-image">
+            <Header />
+            <form className="signIn-form">
+              <h1 className="signin-heading"> Hello </h1>
+              <Input
+                type="text"
+                placeholder="Username"
+                value={signInUser}
+                onChange={this.HandleInputChangeSignInUser} />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={signInPass}
+                onChange={this.HandleInputChangeSignInPass} />
+              <br />
+              <button type="button" className="btn btn-sucess" id="signin" onClick={this.onSignIn}>Sign In</button>
+            </form>
+            {fireRedirect && (
+              <Redirect to={'/profile'} />
+            )}
+            <Footer />
+          </div>
+        </Container>
+      </div>
     );
   }
 
 }
+
 
 export default SignIn;
