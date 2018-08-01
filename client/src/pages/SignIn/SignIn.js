@@ -10,9 +10,9 @@ class SignIn extends Component {
       super(props);
       this.state = {
           token: '',
-          user_id: '',
           signInUser: '',
           signInPass: '',
+          signInError: '',
           fireRedirect: false
       }
 
@@ -48,26 +48,27 @@ class SignIn extends Component {
     API.signIn(siObj)
       .then(json => {
         console.log(json)
-          if (json.statusText==="OK") {
-            console.log('storage method reached');
+          if (json.data.success===true) {
             console.log(json.data.token);
             console.log(json.data);
-            setInStorage('the_main-app', { token: json.data.token, user_id: json.data.user_id });
+            setInStorage('the_main-app', { token: json.data.token });
             this.setState({
               signInError: json.data.message,
               isLoading: false,
               signInUser: '',
               signInPass: '',
-              token: json.data.token,
-              user_id: json.data.user_id
+              token: json.data.token
             });
+            this.setState({fireRedirect: true});
           } else {
+            console.log(json.data.success);
             this.setState({
               signInError: json.message,
               isLoading: false
             })
+            this.setState({signInError: true});
           }
-          this.setState({fireRedirect: true});
+
       });
   }
 
@@ -78,7 +79,9 @@ class SignIn extends Component {
       fireRedirect
     } = this.state;
       return (
-        <div>
+        <div>{
+            this.state.signInError ? <p id="error">Please enter correct credentials</p> : <br/>
+          }
             <form className="signIn-form">
                 <h3 className="signin-heading"> Hello </h3>
                 <Input

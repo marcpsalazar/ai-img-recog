@@ -30,84 +30,97 @@ aws.config.update({
 const s3 = new aws.S3();
 
 let upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "leafy-me/public",
-    key: function (req, file, cb) {
-      console.log(file);
-      let path = "https://s3.amazonaws.com/leafy-me/public/";
-      let newImage = file.fieldname + Date.now() + ".jpg";
-      path += newImage;
-      cb(null, newImage);
-    }
-  })
-});
+    storage: multerS3({
+        s3: s3,
+        bucket: "leafy-me/public",
+        key: function (req, file, cb) {
+            console.log(file);
+            let path = "https://s3.amazonaws.com/leafy-me/public/";
+            let newImage = file.fieldname + Date.now() + ".jpg";
+            path += newImage;
+            cb(null, newImage);
+        }
+    })
+});  
 //---*
 
 module.exports = function (app) {
 
   // Function 
-  app.get('/api/user/:id', function (req, res) {
-    db.Post.find({ user_id: req.params.id })
-      .then(function (trees) {
-        res.send(trees);
-      })
-      .catch(function (err) {
-        return res.json(err);
-      });
-  });
+  app.get('/api/user/:token', function(req, res) {
+    db.UserSession.find({_id: req.params.token})
+        .then(function(session) {
+          db.Post.find({user_id: session[0].userId})
+            .then(function(trees) {
+              res.send(trees);
+            })
+            .catch(function(err) {
+              return res.json(err);
+            });
+          })
+          .catch(function(err) {
+            return res.json(err);
+          });
+    });
 
   // Route for image upload to AWS, Watson processing, etc.
-  app.post('/api/image/image-upload', upload.single('photo'), function (req, res, next) {
+  app.post('/api/image/image-upload/:token', upload.single('photo'), function(req, res, next) {
 
-    let user_id = req.body.user_id;
-    console.log(req.body);
-    // Set up Watson parameters
+      let token = req.params.token; 
+      let user_id = '';
+      db.UserSession.find({_id: token})
+        .then(function(res) {
+          console.log(res);
+          user_id = res[0].userId;
+          console.log(res[0].userId);
+        })
+      // Set up Watson parameters
 
-    let image_url = req.file.location;
-    const classifier_ids = ["trees_447821576"];
-    const threshold = 0.6;
+      let image_url =  req.file.location;
+      const classifier_ids = ["trees_447821576"];
+      const threshold = 0.6;
 
-    let params = {
-      url: image_url,
-      classifier_ids: classifier_ids,
-      threshold: threshold
-    };
-    //---*
+      let params = {
+          url: image_url,
+          classifier_ids: classifier_ids,
+          threshold: threshold
+      };
+      //---*
 
-    visualRecognition.classify(params, function (err, response) { // Watson request
-      if (err) {
-        console.log(err);
-      }
-      else //get Watson results back
-        console.log(JSON.stringify(response, null, 2));
-      let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
-      if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
-        res.send("Image not recognized");
-      } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
-        // Mongo storage
-        let result = {};
-        result.path = image_url;
-        result.name = trees[0].class;
-        db.Tree.find({ name: result.name })
-          .then(function (tree) {
-            result.user_id = user_id;
-            result.sciName = tree[0].sciName;
-            result.range = tree[0].range;
-            db.Post.create(result)
-              .then(function (dbPost) {
-                console.log(dbPost)
-                res.send(dbPost);
-              })
-              .catch(function (err) {
-                return res.json(err);
-              });
-          })
-        //---*
-      } else { // If there are more than one tree types identified, ask client for help.
-        res.send("Please pick one of these images");
-      }
-    });
+      visualRecognition.classify(params, function(err, response) { // Watson request
+          if (err) {
+            console.log(err);
+          }
+          else //get Watson results back
+            console.log(JSON.stringify(response, null, 2));
+            let trees = response.images[0].classifiers[0].classes; // Access Watson returned tree types
+            if (trees.length === 0) { // If there are no tree types, respond client that the image isn't recognized
+              res.send("Image not recognized");
+            } else if (trees.length === 1) { // If there is one tree type, make a database entry and return tree data to client
+            // Mongo storage
+              let result = {};
+              result.path = image_url;
+              result.name = trees[0].class;
+              console.log(user_id);
+              db.Tree.find({name: result.name})
+                  .then(function(tree) {
+                      result.user_id = user_id;
+                      result.sciName = tree[0].sciName;
+                      result.range = tree[0].range;
+                      db.Post.create(result)
+                          .then(function(dbPost) {
+                              console.log(dbPost)
+                              res.send(dbPost);
+                          })
+                          .catch(function(err) {
+                              return res.json(err);
+                          });
+                  })
+            //---*
+              } else { // If there are more than one tree types identified, ask client for help.
+                  res.send("Please pick one of these images");
+              }
+      });
   });
 
   // --------------sign up------------------------------------------------------------
@@ -224,8 +237,7 @@ module.exports = function (app) {
         return res.send({
           success: true,
           message: "Sign In successful",
-          token: doc._id,
-          user_id: doc.userId
+          token: doc._id
         });
       });
     });

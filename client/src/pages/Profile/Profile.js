@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { getFromStorage } from '../../utils/storage';
+import { setInStorage } from '../../utils/storage';
 import { List, ListItem } from "../../components/List";
 import Container from "../../components/Container";
 import Header from "../../components/Header";
@@ -18,8 +19,7 @@ class Profile extends Component {
     this.state = {
       isLoading: true,
       token: '',
-      user_id: '',
-      trees: [],
+      trees: [],  
       selectedFile: null,
       croppedFile: null,
       src: null,
@@ -32,28 +32,31 @@ class Profile extends Component {
     this.logout = this.logout.bind(this);
   }
 
-  //Marcus 
+  //Marcus
     componentDidMount() {
       const obj = getFromStorage('the_main-app');
-      console.log(obj)
       if (obj && obj.token) {
         const { token } = obj;
-        const { user_id } = obj;
-
         API.verify(token);
-        this.loadTrees(user_id);
+        this.loadTrees(token);
         this.setState ({
           token,
-          user_id,
           isLoading: false,
           fireRedirect: false
         });
+      } else {
+        this.setState ({
+          fireRedirect: true
+        })
       }
+
     }
 
-    loadTrees = (id) => {
-      API.getTrees(id)
+    loadTrees = (token) => {
+      console.log("hello");
+      API.getTrees(token)
         .then(res => {
+          console.log(res);
           this.setState({ trees: res.data});
           console.log(this.state.trees);
         })
@@ -63,7 +66,9 @@ class Profile extends Component {
     logout(e) {
       e.preventDefault()
       this.setState({
-        isLoading: true,
+        isLoading: false,
+        token:'',
+        user_id: ''
       });
 
       console.log("button clicked");
@@ -75,27 +80,15 @@ class Profile extends Component {
         API.logOut(token)
         .then(json => {
           if (json.statusText==="OK") {
-            this.setState({
-              token: '',
-              user_id: '',
-              isLoading: false
-            })
-          } else {
-            this.setState({
-              isLoading: false
-            })
+            setInStorage('the_main-app', { token: ""});
+            this.setState({fireRedirect: true});
           }
-        })
-      } else {
-        this.setState({
-          isLoading: false
-        })
+        });
       }
-      this.setState({fireRedirect: true});
     }
   //---*
-  
-  //Darwin 
+
+  //Darwin
     // Function to get file type from base64 string
     imageFileExtensionFromBase64 = base64Data => {
       return base64Data.substring('data:image/'.length, base64Data.indexOf(';base64'));
@@ -112,13 +105,13 @@ class Profile extends Component {
     }
 
     // Update state to catch file provided from client
-    fileChangedHandler = event => { 
+    fileChangedHandler = event => {
       this.setState({selectedFile: event.target.files[0]});
     }
 
     // Function to reset image submission form
-    resetForm = () => { 
-      document.getElementById("leaf-submit").reset();  
+    resetForm = () => {
+      document.getElementById("leaf-submit").reset();
       this.setState({ selectedFile: null,
           croppedFile: null,
           src: null,
@@ -128,19 +121,18 @@ class Profile extends Component {
           displayCroppedImage: "none",
           displaySubmit: "none"});
     }
-    
-    // Function to handle image upload to server 
-    uploadHandler = () => { 
+
+    // Function to handle image upload to server
+    uploadHandler = () => {
       const obj = getFromStorage('the_main-app');
       // If there's no cropped file, throw error
-      if (!this.state.croppedFile) { 
+      if (!this.state.croppedFile) {
         alert("Please provide a photo")
       } else { // Otherwise submit cropped file to server
-        const { user_id } = obj;
+        const { token } = obj;
         const formData = new FormData()
         formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
-        formData.append('user_id', user_id);
-        API.postImage(formData) 
+        API.postImage(token, formData) 
           .then(function(res) {
             console.log(res.data);
         });
@@ -185,7 +177,7 @@ class Profile extends Component {
       const cropBase64 = this.state.cropResult;
       const fileExt = this.imageFileExtensionFromBase64(cropBase64);
       const fileName = `photo.${fileExt}`;
-      this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) }, 
+      this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) },
         this.uploadHandler
       );
     }
@@ -200,7 +192,7 @@ class Profile extends Component {
       <Container fluid>
         <Header />
         <div>
-          <TestImageUpload 
+          <TestImageUpload
             fileChangedHandler={this.fileChangedHandler}
             handleImageUpload={this.handleImageUpload}
             onSelectFile={this.onSelectFile}
@@ -246,7 +238,7 @@ class Profile extends Component {
         </button>
         <Footer />
         {fireRedirect && (
-          <Redirect to={'/signin'}/>
+          <Redirect to={!this.state.token ? '/' : '/profile' }/>
           )}
       </Container>
     );
