@@ -2,8 +2,8 @@ import axios from "axios";
 
 export default {
 
-  postImage: function(data) {
-    return axios.post('/api/image/image-upload', data);
+  postImage: function(token, data) {
+    return axios.post('/api/image/image-upload/' + token, data);
   },
 
   signUp: function(obj) {
@@ -22,8 +22,8 @@ export default {
     return axios.get('/api/account/verify?token=' + token);
   },
 
-  getTrees: function(id) {
-    return axios.get('/api/user/' + id);
+  getTrees: function(token) {
+    return axios.get('/api/user/' + token);
   }
 
 };

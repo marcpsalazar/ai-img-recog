@@ -41,27 +41,39 @@ let upload = multer({
             cb(null, newImage);
         }
     })
-});
+});  
 //---*
 
 module.exports = function (app) {
 
   // Function 
-  app.get('/api/user/:id', function(req, res) {
-    db.Post.find({user_id: req.params.id})
-      .then(function(trees) {
-        res.send(trees);
-      })
-      .catch(function(err) {
-        return res.json(err);
-      });
-  });
+  app.get('/api/user/:token', function(req, res) {
+    db.UserSession.find({_id: req.params.token})
+        .then(function(session) {
+          db.Post.find({user_id: session[0].userId})
+            .then(function(trees) {
+              res.send(trees);
+            })
+            .catch(function(err) {
+              return res.json(err);
+            });
+          })
+          .catch(function(err) {
+            return res.json(err);
+          });
+    });
 
   // Route for image upload to AWS, Watson processing, etc.
-  app.post('/api/image/image-upload', upload.single('photo'), function(req, res, next) {
+  app.post('/api/image/image-upload/:token', upload.single('photo'), function(req, res, next) {
 
-      let user_id = req.body.user_id; 
-      console.log(req.body);
+      let token = req.params.token; 
+      let user_id = '';
+      db.UserSession.find({_id: token})
+        .then(function(res) {
+          console.log(res);
+          user_id = res[0].userId;
+          console.log(res[0].userId);
+        })
       // Set up Watson parameters
 
       let image_url =  req.file.location;
@@ -89,6 +101,7 @@ module.exports = function (app) {
               let result = {};
               result.path = image_url;
               result.name = trees[0].class;
+              console.log(user_id);
               db.Tree.find({name: result.name})
                   .then(function(tree) {
                       result.user_id = user_id;
@@ -224,8 +237,7 @@ module.exports = function (app) {
         return res.send({
           success: true,
           message: "Sign In successful",
-          token: doc._id,
-          user_id: doc.userId
+          token: doc._id
         });
       });
     });

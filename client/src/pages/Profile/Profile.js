@@ -19,7 +19,6 @@ class Profile extends Component {
     this.state = {
       isLoading: true,
       token: '',
-      user_id: '',
       trees: [],
       selectedFile: null,
       croppedFile: null,
@@ -36,16 +35,12 @@ class Profile extends Component {
   //Marcus
     componentDidMount() {
       const obj = getFromStorage('the_main-app');
-      console.log(obj)
       if (obj && obj.token) {
         const { token } = obj;
-        const { user_id } = obj;
-
         API.verify(token);
-        this.loadTrees(user_id);
+        this.loadTrees(token);
         this.setState ({
           token,
-          user_id,
           isLoading: false,
           fireRedirect: false
         });
@@ -57,9 +52,11 @@ class Profile extends Component {
 
     }
 
-    loadTrees = (id) => {
-      API.getTrees(id)
+    loadTrees = (token) => {
+      console.log("hello");
+      API.getTrees(token)
         .then(res => {
+          console.log(res);
           this.setState({ trees: res.data});
           console.log(this.state.trees);
         })
@@ -83,7 +80,7 @@ class Profile extends Component {
         API.logOut(token)
         .then(json => {
           if (json.statusText==="OK") {
-            setInStorage('the_main-app', { token: "", user_id: ""});
+            setInStorage('the_main-app', { token: ""});
             this.setState({fireRedirect: true});
           }
         });
@@ -132,11 +129,10 @@ class Profile extends Component {
       if (!this.state.croppedFile) {
         alert("Please provide a photo")
       } else { // Otherwise submit cropped file to server
-        const { user_id } = obj;
+        const { token } = obj;
         const formData = new FormData()
         formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
-        formData.append('user_id', user_id);
-        API.postImage(formData)
+        API.postImage(token, formData)
           .then(function(res) {
             console.log(res.data);
         });
