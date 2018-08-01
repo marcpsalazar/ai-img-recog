@@ -54,9 +54,7 @@ class Profile extends Component {
   loadTrees = token => {
     API.getTrees(token)
       .then(res => {
-        console.log(res);
         this.setState({ trees: res.data });
-        console.log("hello");
       })
       .catch(err => console.log(err));
   }
@@ -69,7 +67,6 @@ class Profile extends Component {
       user_id: ''
     });
 
-    console.log("button clicked");
     const obj = getFromStorage('the_main-app');
 
     if (obj && obj.token) {
@@ -214,30 +211,29 @@ class Profile extends Component {
           </div>
           <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
         </div>
-        {!this.state.trees.length ? (
-          <h1> hello </h1>
-          // <List>
-          //   {this.state.trees.map(tree => (
-          //     <ListItem key={tree._id}>
-          //         <div className="row">
-          //           <div className="col-md-3">
-          //             <i>
-          //               <strong>{tree.name}</strong>
-          //               <p>{tree.sciName}</p>
-          //             </i>
-          //           </div>
-          //           <div className="col-md-3">
-          //             <img src={tree.path} />
-          //           </div>
-          //           <div className="col-md-3">
-          //             <img src={tree.range} />
-          //           </div>
-          //           <div className="col-md-1"></div>
-          //         </div>
-          //       {/* <DeleteBtn/> */}
-          //     </ListItem>
-          //  ))}
-          // </List>
+        {this.state.trees.length ? (
+          <List>
+            {this.state.trees.map(tree => (
+              <ListItem key={tree._id}>
+                  <div className="row">
+                    <div className="col-md-3">
+                      <i>
+                        <strong>{tree.name}</strong>
+                        <p>{tree.sciName}</p>
+                      </i>
+                    </div>
+                    <div className="col-md-3">
+                      <img src={tree.path} />
+                    </div>
+                    <div className="col-md-3">
+                      <img src={tree.range} />
+                    </div>
+                    <div className="col-md-1"></div>
+                  </div>
+                {/* <DeleteBtn/> */}
+              </ListItem>
+           ))}
+          </List>
           ) : (
           <ProfilePhotos />
           )}
