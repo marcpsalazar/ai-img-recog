@@ -48,6 +48,8 @@ module.exports = function (app) {
 
   // Function 
   app.get('/api/user/:token', function(req, res) {
+    console.log(req.params.token);
+    console.log(mongoose.Types.ObjectId(req.params.token));
     db.UserSession.find({_id: mongoose.Types.ObjectId(req.params.token)}) //req.params.token
         .then(function(session) {
           db.Post.find({user_id: session[0].userId})
