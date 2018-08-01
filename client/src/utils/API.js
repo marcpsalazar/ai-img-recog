@@ -19,7 +19,7 @@ export default {
   },
 
   verify: function(token) {
-    return axios.get('/api/account/verify?token=' + token)
+    return axios.get('/api/account/verify?token=' + token);
   },
 
   getTrees: function(id) {

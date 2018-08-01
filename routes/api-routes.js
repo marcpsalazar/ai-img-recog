@@ -46,8 +46,15 @@ let upload = multer({
 
 module.exports = function (app) {
 
+  // Function 
   app.get('/api/user/:id', function(req, res) {
-    console.log(req.params.id + "hello");
+    db.Post.find({user_id: req.params.id})
+      .then(function(trees) {
+        res.send(trees);
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
   });
 
   // Route for image upload to AWS, Watson processing, etc.

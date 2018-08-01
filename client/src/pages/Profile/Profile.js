@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { getFromStorage } from '../../utils/storage';
+import { List, ListItem } from "../../components/List";
 import Container from "../../components/Container";
 import Header from "../../components/Header";
 import Cropper from 'react-cropper'
@@ -18,6 +19,7 @@ class Profile extends Component {
       isLoading: true,
       token: '',
       user_id: '',
+      trees: [],
       selectedFile: null,
       croppedFile: null,
       src: null,
@@ -51,10 +53,11 @@ class Profile extends Component {
 
     loadTrees = (id) => {
       API.getTrees(id)
-        // .then(res =>
-        //   this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-        // )
-        // .catch(err => console.log(err));
+        .then(res => {
+          this.setState({ trees: res.data});
+          console.log(this.state.trees);
+        })
+        .catch(err => console.log(err));
     }
 
     logout(e) {
@@ -219,7 +222,24 @@ class Profile extends Component {
           </div>
           <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
         </div>
-        <ProfilePhotos />
+        {this.state.trees.length ? (
+          <List>
+            {this.state.trees.map(tree => (
+              <ListItem key={tree._id}>
+                  <strong>
+                    {tree.name}
+                  </strong>
+                  <i>
+                    {tree.sciName}
+                  </i>
+                  <img src={tree.path} />
+                  <img src={tree.range} />
+                {/* <DeleteBtn/> */}
+              </ListItem>
+            ))}
+        </List> )
+          : ( <ProfilePhotos />
+        )}
         <button id="logout" type="button" className="btn btn-success"
         onClick={this.logout}>
             Log Out
