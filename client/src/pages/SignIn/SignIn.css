@@ -16,12 +16,12 @@
     padding-right: 25px;
     padding-top: 5px;
     padding-bottom:0px;
-    border: rgb(7, 36, 7); 
+    border: rgb(7, 36, 7);
     margin-bottom:10px;
-     
+
 }
 .form-control {
-    border-color: rgb(7, 104, 7);  
+    border-color: rgb(7, 104, 7);
 }
 .form-control:focus {
     color: #272b2e;

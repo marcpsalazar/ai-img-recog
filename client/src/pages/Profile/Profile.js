@@ -223,14 +223,23 @@ class Profile extends Component {
           <List>
             {this.state.trees.map(tree => (
               <ListItem key={tree._id}>
-                <strong>
-                  {tree.name}
-                </strong>
-                <i>
-                  {tree.sciName}
-                </i>
-                <img src={tree.path} />
-                <img src={tree.range} />
+                  <div class="row">
+                    <div class="col-md-3">
+                      <i>
+                        <strong>{tree.name}</strong>
+                        <p>{tree.sciName}</p>
+                      </i>
+                    </div>
+                    <div class="col-md-3">
+                      <img src={tree.path} />
+                    </div>
+                    <div class="col-md-3">
+                      <img src={tree.range} />
+                    </div>
+                    <div class="col-md-1"></div>
+                  </div>
+
+
                 {/* <DeleteBtn/> */}
               </ListItem>
             ))}

@@ -1,11 +1,12 @@
 .footer {
     background-color: #0c7c30;
-    height: 75px;
+    height: 50px;
     text-align: center;
     border-top: solid 3px darkgray;
+    margin-top: 7%;
 }
 
 .copyright {
-    padding-top: 35px;
+    padding-top: 10px;
     color: white;
 }
