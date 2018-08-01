@@ -1,7 +1,7 @@
 .signIn-form {
     width: 500px;
-    height: 250px;
-    background-color: rgba(192, 201, 66, 0.808);
+    height: 260px;
+    background-color: whitesmoke;
     border: rgb(34, 82, 30);
     border-style: solid;
   margin-left: auto;
@@ -20,12 +20,22 @@
     margin-bottom:10px;
      
 }
+.form-control {
+    border-color: rgb(7, 104, 7);  
+}
+.form-control:focus {
+    color: #272b2e;
+    background-color: rgb(238, 237, 237);
+    border-color: rgb(7, 104, 7);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(3, 110, 17, 0.25);
+}
 
 .signin-heading {
-    font-family: cursive;
+    font-family: 'Fredericka the Great', cursive;
     text-align: center;
-    font-style: oblique;
-    font-weight: bold;
+    /* font-style: oblique;
+    font-weight: bold; */
     padding: 10px;
 }
 
@@ -35,11 +45,11 @@
     color:white;
     margin-top: 0px;
     margin-bottom: 15px;
-   
+    font-family: 'Fredericka the Great', cursive;
 }
 
 .background-image {
-    background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/06/Best-Green-Autumn-Leaves-Background-Wallpaper.jpg");
+    background-image: url("../../images/leaves-background.jpeg");
     background-size: cover;
-    height:80%;
+    height:100%;
 }

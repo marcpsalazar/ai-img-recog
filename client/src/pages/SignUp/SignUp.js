@@ -62,7 +62,7 @@ class SignUp extends Component {
         <div className="background-image">
           <Header />
           <form className="signUp-form">
-            <h3 className="signup-heading"> Create a Profile </h3>
+            <h1 className="signup-heading"> Create a Profile </h1>
             <Input
               type="text"
               placeholder="Username"

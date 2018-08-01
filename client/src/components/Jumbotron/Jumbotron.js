@@ -10,7 +10,7 @@ const Jumbotron = props => (
 
       <p className="lead">This is an explanation of our app.</p>
 
-      <hr className="my-4" />
+       <hr className="my-4" />
 
       <p>Here are some directions.</p>
 

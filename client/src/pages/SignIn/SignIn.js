@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { setInStorage } from '../../utils/storage';
 import Input from "../../components/Input";
-import { getFromStorage, setInStorage, } from '../../utils/storage';
 import API from "../../utils/API";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Container from "../../components/Container";
+import "./SignIn.css";
 
 
 class SignIn extends Component {
@@ -86,7 +86,7 @@ class SignIn extends Component {
         <div className="background-image">
           <Header />
           <form className="signIn-form">
-            <h2 className="signin-heading"> Hello </h2>
+            <h1 className="signin-heading"> Hello </h1>
             <Input
               type="text"
               placeholder="Username"
