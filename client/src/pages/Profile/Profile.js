@@ -35,10 +35,9 @@ class Profile extends Component {
   //Marcus
   componentDidMount = () => {
     const obj = getFromStorage('the_main-app');
+    const { token } = obj;
     if (obj && obj.token) {
-      const { token } = obj;
       API.verify(token);
-      this.loadTrees(token);
       this.setState({
         token,
         isLoading: false,
@@ -49,10 +48,10 @@ class Profile extends Component {
         fireRedirect: true
       })
     }
-
+    this.loadTrees(token);
   }
 
-  loadTrees = (token) => {
+  loadTrees = token => {
     API.getTrees(token)
       .then(res => {
         console.log(res);

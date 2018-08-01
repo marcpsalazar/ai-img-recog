@@ -47,7 +47,7 @@ let upload = multer({
 module.exports = function (app) {
 
   // Function 
-  app.get('/api/user/:token', function(req, res) {
+  app.get('/api/user_trees/:token', function(req, res) {
     console.log(req.params.token);
     console.log(mongoose.Types.ObjectId(req.params.token));
     db.UserSession.find({_id: mongoose.Types.ObjectId(req.params.token)}) //req.params.token
