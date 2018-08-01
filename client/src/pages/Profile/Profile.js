@@ -33,7 +33,7 @@ class Profile extends Component {
   }
 
   //Marcus
-  componentDidMount() {
+  componentDidMount = () => {
     const obj = getFromStorage('the_main-app');
     if (obj && obj.token) {
       const { token } = obj;
@@ -52,9 +52,10 @@ class Profile extends Component {
 
   }
 
-
   loadTrees = (token) => {
     console.log(this.state.trees);
+    console.log(typeof this.state.trees);
+    console.log(this.state.trees.length);
     API.getTrees(token)
       .then(res => {
         console.log(res);
@@ -87,8 +88,6 @@ class Profile extends Component {
         });
     }
   }
-
-
   //---*
 
   //Darwin
