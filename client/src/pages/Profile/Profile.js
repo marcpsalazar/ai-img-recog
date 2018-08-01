@@ -219,7 +219,7 @@ class Profile extends Component {
           </div>
           <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
         </div>
-        {this.state.trees.length ? (
+        {!this.state.trees.length ? (
           <h1> hello </h1>
           // <List>
           //   {this.state.trees.map(tree => (
@@ -241,7 +241,7 @@ class Profile extends Component {
           //         </div>
           //       {/* <DeleteBtn/> */}
           //     </ListItem>
-          //   ))}
+          //  ))}
           // </List>
           ) : (
           <ProfilePhotos />
