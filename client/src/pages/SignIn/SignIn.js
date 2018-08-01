@@ -10,7 +10,6 @@ class SignIn extends Component {
       super(props);
       this.state = {
           token: '',
-          user_id: '',
           signInUser: '',
           signInPass: '',
           signInError: '',
@@ -52,14 +51,13 @@ class SignIn extends Component {
           if (json.data.success===true) {
             console.log(json.data.token);
             console.log(json.data);
-            setInStorage('the_main-app', { token: json.data.token, user_id: json.data.user_id });
+            setInStorage('the_main-app', { token: json.data.token });
             this.setState({
               signInError: json.data.message,
               isLoading: false,
               signInUser: '',
               signInPass: '',
-              token: json.data.token,
-              user_id: json.data.user_id
+              token: json.data.token
             });
             this.setState({fireRedirect: true});
           } else {
