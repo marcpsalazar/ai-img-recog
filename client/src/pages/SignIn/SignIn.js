@@ -82,27 +82,26 @@ class SignIn extends Component {
       signInPass,
       fireRedirect
     } = this.state;
-    return (
-      <div>{
-        this.state.signInError ? <p id="error">Please enter correct credentials</p> : <br />
-      }
-        <Container fluid>
-          <div className="background-image">
-            <Header />
+      return (
+        <div>
             <form className="signIn-form">
-              <h1 className="signin-heading"> Hello </h1>
-              <Input
-                type="text"
-                placeholder="Username"
-                value={signInUser}
-                onChange={this.HandleInputChangeSignInUser} />
-              <Input
-                type="password"
-                placeholder="Password"
-                value={signInPass}
-                onChange={this.HandleInputChangeSignInPass} />
-              <br />
-              <button type="button" className="btn btn-sucess" id="signin" onClick={this.onSignIn}>Sign In</button>
+                <h3 className="signin-heading"> Hello </h3>
+                <Input
+                    type="text"
+                    placeholder="Username"
+                    value={signInUser}
+                    onChange={this.HandleInputChangeSignInUser}/>
+                <Input
+                    type="password"
+                    placeholder="Password"
+                    value={signInPass}
+                    onChange={this.HandleInputChangeSignInPass}/>
+                <br />
+                <button type="button" className="btn btn-success" id="signin" onClick={this.onSignIn}>Sign In</button>
+                <br></br>
+                  {
+                    this.state.signInError ? <p id="error">Invalid Username or Password</p> : <br/>
+                  }
             </form>
             {fireRedirect && (
               <Redirect to={'/profile'} />
