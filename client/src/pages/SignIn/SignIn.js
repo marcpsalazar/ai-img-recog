@@ -84,6 +84,7 @@ class SignIn extends Component {
     } = this.state;
       return (
         <div>
+          <Container>
             <form className="signIn-form">
                 <h3 className="signin-heading"> Hello </h3>
                 <Input
@@ -107,7 +108,6 @@ class SignIn extends Component {
               <Redirect to={'/profile'} />
             )}
             <Footer />
-          </div>
         </Container>
       </div>
     );
