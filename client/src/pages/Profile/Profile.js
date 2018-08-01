@@ -218,7 +218,7 @@ class Profile extends Component {
           </div>
           <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
         </div>
-        {this.state.trees.length !== 0 ? (
+        {this.state.trees.length != 0 ? (
           <List>
             {this.state.trees.map(tree => (
               <ListItem key={tree._id}>
