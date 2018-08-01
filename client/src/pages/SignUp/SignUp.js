@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Route, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import "./SignUp.css";
-import Profile from "../Profile";
 import Input from "../../components/Input";
 import API from "../../utils/API";
 import Header from "../../components/Header";
@@ -22,18 +21,17 @@ class SignUp extends Component {
     this.HandleInputChangeSignUpPass = this.HandleInputChangeSignUpPass.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
   }
+
   HandleInputChangeSignUpUser(event) {
     this.setState({
       signUpUser: event.target.value
-
-    })
+    });
   }
 
   HandleInputChangeSignUpPass(event) {
     this.setState({
       signUpPass: event.target.value
-
-    })
+    });
   }
 
   onSignUp(e) {
@@ -50,8 +48,6 @@ class SignUp extends Component {
     }
     API.signUp(suObj);
   }
-
-
 
   render() {
     const {
@@ -81,7 +77,7 @@ class SignUp extends Component {
             <button type="button" className="btn btn-sucess" id="signup" onClick={this.onSignUp}>Sign Up</button>
           </form>
           {fireRedirect && (
-            <Redirect to={'/profile'} />
+            <Redirect to={'/signin'} />
           )}
           <Footer />
         </div>

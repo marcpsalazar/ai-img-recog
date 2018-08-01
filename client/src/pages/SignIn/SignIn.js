@@ -1,15 +1,12 @@
 import React, { Component } from "react";
-import "./SignIn.css";
+import { Redirect } from "react-router";
+import { setInStorage } from '../../utils/storage';
 import Input from "../../components/Input";
 import { getFromStorage, setInStorage, } from '../../utils/storage';
 import API from "../../utils/API";
-import Profile from "../Profile";
-import { Route, Redirect } from "react-router";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Container from "../../components/Container";
-
-
 
 
 class SignIn extends Component {
@@ -17,6 +14,7 @@ class SignIn extends Component {
     super(props);
     this.state = {
       token: '',
+      user_id: '',
       signInUser: '',
       signInPass: '',
       fireRedirect: false
@@ -26,23 +24,25 @@ class SignIn extends Component {
     this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
   }
+
   HandleInputChangeSignInUser(event) {
     this.setState({
       signInUser: event.target.value
-
-    })
+    });
   }
 
   HandleInputChangeSignInPass(event) {
     this.setState({
       signInPass: event.target.value
-
-    })
+    });
   }
 
   onSignIn(e) {
     e.preventDefault()
-    const { signInUser, signInPass } = this.state
+    const {
+      signInUser,
+      signInPass
+    } = this.state
 
     let siObj = {
       username: signInUser,
@@ -50,21 +50,21 @@ class SignIn extends Component {
     }
 
     API.signIn(siObj)
-
       .then(json => {
         console.log(json)
         if (json.statusText === "OK") {
-          console.log('storage method reached')
-          console.log(json.data.token)
-          setInStorage('the_main-app', { token: json.data.token });
+          console.log('storage method reached');
+          console.log(json.data.token);
+          console.log(json.data);
+          setInStorage('the_main-app', { token: json.data.token, user_id: json.data.user_id });
           this.setState({
             signInError: json.data.message,
             isLoading: false,
             signInUser: '',
             signInPass: '',
-            token: json.data.token
-          })
-          // console.log(this.state.token)
+            token: json.data.token,
+            user_id: json.data.user_id
+          });
         } else {
           this.setState({
             signInError: json.message,
@@ -72,15 +72,11 @@ class SignIn extends Component {
           })
         }
         this.setState({ fireRedirect: true });
-
-      })
-
+      });
   }
 
   render() {
     const {
-      token,
-      signInError,
       signInUser,
       signInPass,
       fireRedirect
