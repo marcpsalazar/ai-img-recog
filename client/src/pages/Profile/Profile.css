@@ -1,13 +1,28 @@
-img {
-  height: 200px;
+/* img
+{
+  width: 180px;
+  margin: 10px;
 }
-strong, i {
-  margin-right: 2%;
+
+div.list-overflow-container {
+    width:80%;
+    margin:auto;
+    border:green solid;
+}
+
+.list-group-item {
+    text-align: center;
+
 }
 
 #logout {
-  margin-top: 10px;
-}
-#logout {
-  margin-top: 5%;
+    margin:50%;
+    background-color: rgb(54, 131, 54);
+    color:white;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-family: 'Fredericka the Great', cursive;
+} */
+img {
+  height: 200px;
 }

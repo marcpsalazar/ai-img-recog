@@ -10,7 +10,7 @@ const Jumbotron = props => (
 
       <p className="lead">You find a leaf and we'll do the rest.</p>
 
-      <hr className="my-4" />
+       <hr className="my-4" />
 
 
       < LogInBtn >

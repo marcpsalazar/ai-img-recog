@@ -15,16 +15,16 @@ mongoose.connect(MONGODB_URI);
 
 // Initiaize Watson Visual Recognition
 const visualRecognition = new VisualRecognitionV3({
-    version: process.env.WATSON_VERSION,
-    iam_apikey: process.env.WATSON_APIKEY
+  version: process.env.WATSON_VERSION,
+  iam_apikey: process.env.WATSON_APIKEY
 });
 //---*
 
 // Initialize AWS
 aws.config.update({
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    region: 'us-east-1'
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: 'us-east-1'
 });
 
 const s3 = new aws.S3();
@@ -123,9 +123,9 @@ module.exports = function (app) {
       });
   });
 
-// --------------sign up------------------------------------------------------------
+  // --------------sign up------------------------------------------------------------
   app.post('/api/account/signup', (req, res, next) => {
-    const {body} = req;
+    const { body } = req;
     const {
       username,
       password
@@ -147,40 +147,40 @@ module.exports = function (app) {
 
     db.User.find({
       username: username
-      }, (err, previousUsers) => {
+    }, (err, previousUsers) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error"
+        });
+      } else if (previousUsers.length > 0) {
+        return res.send({
+          success: false,
+          message: "Username is taken."
+        })
+      }
+
+      const newUser = new db.User();
+      newUser.username = username;
+      newUser.password = newUser.generateHash(password);
+      newUser.save((err, user) => {
         if (err) {
           return res.send({
             success: false,
-            message: "Error"
-          });
-        } else if (previousUsers.length > 0) {
-          return res.send({
-            success: false,
-            message: "Username is taken."
+            message: "Server error"
           })
         }
-
-        const newUser = new db.User();
-        newUser.username = username;
-        newUser.password = newUser.generateHash(password);
-        newUser.save((err, user) => {
-          if (err) {
-            return res.send({
-              success: false,
-              message: "Server error"
-            })
-          }
-          return res.send({
-            success: true,
-            message: "Sign Up successful!"
-          })
+        return res.send({
+          success: true,
+          message: "Sign Up successful!"
         })
       })
+    })
   });
 
-// --------------sign in -----------------------------------------------------------
+  // --------------sign in -----------------------------------------------------------
   app.post('/api/account/signin', (req, res, next) => {
-    const {body} = req;
+    const { body } = req;
     const {
       username,
       password
@@ -243,40 +243,40 @@ module.exports = function (app) {
     });
   });
 
-// --------------verify--------------------------------------------------------------
+  // --------------verify--------------------------------------------------------------
   app.get('/api/account/verify', (req, res, next) => {
 
-    const {query} = req;
-    const {token} = query;
+    const { query } = req;
+    const { token } = query;
 
     db.UserSession.find({
       _id: token,
       isDeleted: false
     }, (err, sessions) => {
-        if (err) {
-          return res.send({
-            success: false,
-            message: "Server Error"
-          })
-        }
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Server Error"
+        })
+      }
 
-        if (sessions.length != 1) {
-          return res.send({
-            success: false,
-            message: "Invalid"
-          })
-        }
+      if (sessions.length != 1) {
+        return res.send({
+          success: false,
+          message: "Invalid"
+        })
+      }
 
-        else {
-          return res.send({
-            success: true,
-            message: 'good'
-          })
-        }
-      })
+      else {
+        return res.send({
+          success: true,
+          message: 'good'
+        })
+      }
+    })
   })
 
-// ---------------logout-------------------------------------------------------------
+  // ---------------logout-------------------------------------------------------------
   app.get('/api/account/logout', (req, res, next) => {
     const { query } = req;
     const { token } = query;
@@ -284,8 +284,8 @@ module.exports = function (app) {
     db.UserSession.findOneAndUpdate({
       _id: token,
       isDeleted: false
-      }, {
-        $set:{isDeleted:true}
+    }, {
+        $set: { isDeleted: true }
       }, null, (err, sessions) => {
         if (err) {
           return res.send({

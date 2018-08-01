@@ -3,7 +3,11 @@ import { Redirect } from "react-router";
 import { setInStorage } from '../../utils/storage';
 import Input from "../../components/Input";
 import API from "../../utils/API";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import Container from "../../components/Container";
 import "./SignIn.css";
+
 
 class SignIn extends Component {
   constructor(props) {
@@ -16,9 +20,9 @@ class SignIn extends Component {
           fireRedirect: false
       }
 
-      this.HandleInputChangeSignInPass = this.HandleInputChangeSignInPass.bind(this);
-      this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
-      this.onSignIn = this.onSignIn.bind(this);
+    this.HandleInputChangeSignInPass = this.HandleInputChangeSignInPass.bind(this);
+    this.HandleInputChangeSignInUser = this.HandleInputChangeSignInUser.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
   }
 
   HandleInputChangeSignInUser(event) {
@@ -48,26 +52,26 @@ class SignIn extends Component {
     API.signIn(siObj)
       .then(json => {
         console.log(json)
-          if (json.data.success===true) {
-            console.log(json.data.token);
-            console.log(json.data);
-            setInStorage('the_main-app', { token: json.data.token });
-            this.setState({
-              signInError: json.data.message,
-              isLoading: false,
-              signInUser: '',
-              signInPass: '',
-              token: json.data.token
-            });
-            this.setState({fireRedirect: true});
-          } else {
-            console.log(json.data.success);
-            this.setState({
-              signInError: json.message,
-              isLoading: false
-            })
-            this.setState({signInError: true});
-          }
+        if (json.data.success === true) {
+          console.log(json.data.token);
+          console.log(json.data);
+          setInStorage('the_main-app', { token: json.data.token });
+          this.setState({
+            signInError: json.data.message,
+            isLoading: false,
+            signInUser: '',
+            signInPass: '',
+            token: json.data.token
+          });
+          this.setState({ fireRedirect: true });
+        } else {
+          console.log(json.data.success);
+          this.setState({
+            signInError: json.message,
+            isLoading: false
+          })
+          this.setState({ signInError: true });
+        }
 
       });
   }
@@ -100,11 +104,16 @@ class SignIn extends Component {
                   }
             </form>
             {fireRedirect && (
-              <Redirect to={'/profile'}/>
+              <Redirect to={'/profile'} />
             )}
-        </div>
-      );
+            <Footer />
+          </div>
+        </Container>
+      </div>
+    );
   }
+
 }
+
 
 export default SignIn;
