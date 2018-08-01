@@ -29,7 +29,7 @@
   "dependencies": {
     "aws-sdk": "^2.279.1",
     "axios": "^0.18.0",
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.0",
     "create-react-app": "^1.5.2",
