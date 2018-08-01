@@ -8,11 +8,10 @@ const Jumbotron = props => (
     <div className="jumbotron">
         <h1 className="display-4">Discovery: From Leaf to Tree!</h1>
 
-      <p className="lead">This is an explanation of our app.</p>
+      <p className="lead">You find a leaf and we'll do the rest.</p>
 
       <hr className="my-4" />
 
-      <p>Here are some directions.</p>
 
       < LogInBtn >
         Log

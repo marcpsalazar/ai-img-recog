@@ -4,6 +4,8 @@
   border-radius: 4px;
   overflow-y: scroll;
   overflow-x: hidden;
+  width: 66%;
+  margin-left: 15%;
 }
 
 .list-overflow-container ul {
