@@ -81,9 +81,7 @@ class SignIn extends Component {
       fireRedirect
     } = this.state;
       return (
-        <div>{
-            this.state.signInError ? <p id="error">Please enter correct credentials</p> : <br/>
-          }
+        <div>
             <form className="signIn-form">
                 <h3 className="signin-heading"> Hello </h3>
                 <Input
@@ -97,7 +95,11 @@ class SignIn extends Component {
                     value={signInPass}
                     onChange={this.HandleInputChangeSignInPass}/>
                 <br />
-                <button onClick={this.onSignIn}>Sign In</button>
+                <button type="button" className="btn btn-success" id="signin" onClick={this.onSignIn}>Sign In</button>
+                <br></br>
+                  {
+                    this.state.signInError ? <p id="error">Invalid Username or Password</p> : <br/>
+                  }
             </form>
             {fireRedirect && (
               <Redirect to={'/profile'}/>

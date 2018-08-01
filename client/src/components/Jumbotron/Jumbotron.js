@@ -6,7 +6,7 @@ import SignUpBtn from "../SignUpBtn";
 const Jumbotron = props => (
 
     <div className="jumbotron">
-        <h1 className="display-4">Catchy slogan!</h1>
+        <h1 className="display-4">Discovery: From Leaf to Tree!</h1>
 
       <p className="lead">This is an explanation of our app.</p>
 

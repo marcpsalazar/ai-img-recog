@@ -84,23 +84,7 @@ class Profile extends Component {
         .then(json => {
           if (json.statusText==="OK") {
             setInStorage('the_main-app', { token: "", user_id: ""});
-      //       this.setState({
-      //         token: '',
-      //         user_id: '',
-      //         isLoading: false
-      //       })
-      //     } else {
-      //       this.setState({
-      //         isLoading: false
-      //       })
-      //     }
-      //   })
-      // } else {
-      //   this.setState({
-      //     isLoading: false
-      //   })
-      // }
-          this.setState({fireRedirect: true});
+            this.setState({fireRedirect: true});
           }
         });
       }
