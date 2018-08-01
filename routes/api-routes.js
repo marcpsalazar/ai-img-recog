@@ -52,6 +52,7 @@ module.exports = function (app) {
         .then(function(session) {
           db.Post.find({user_id: session[0].userId})
             .then(function(trees) {
+              console.log(trees);
               res.send(trees);
             })
             .catch(function(err) {
