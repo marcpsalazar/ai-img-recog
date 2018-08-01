@@ -1,25 +1,30 @@
 .signUp-form {
     width: 500px;
-    height: 350px;
-    background-color: rgba(83, 163, 37, 0.466);
+    height: 250px;
+    background-color: rgba(192, 201, 66, 0.808);
     border: rgb(34, 82, 30);
     border-style: solid;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
   margin-bottom: 60px;
+  opacity: 0.8;
 }
 
 .form-group {
-    padding: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom:0px;
     border: rgb(7, 36, 7); 
+    margin-bottom:10px;
 }
 
 .signup-heading {
-    font-family: 'Cabin Sketch';
+    font-family: cursive;
     text-align: center;
     font-style: oblique;
-    font-weight: bolder;
+    font-weight: bold;
     padding: 10px;
 }
 
@@ -27,10 +32,12 @@
     margin-left:220px;
     background-color: rgb(54, 131, 54);
     color:white;
+    margin-top: 0px;
+    margin-bottom: 15px;
 }
 
 .background-image {
-    background-image: url("http://www.amazingwallpaperz.com/wp-content/uploads/Leaf-Free-Wallpapers.jpg");
+    background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/06/Best-Green-Autumn-Leaves-Background-Wallpaper.jpg");
     background-size: cover;
     height:80%;
 }

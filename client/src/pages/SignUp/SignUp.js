@@ -78,7 +78,7 @@ class SignUp extends Component {
               value={signUpPass}
               onChange={this.HandleInputChangeSignUpPass} />
             <br />
-            <button id="signup" onClick={this.onSignUp}>Sign Up</button>
+            <button type="button" className="btn btn-sucess" id="signup" onClick={this.onSignUp}>Sign Up</button>
           </form>
           {fireRedirect && (
             <Redirect to={'/profile'} />

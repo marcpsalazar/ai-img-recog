@@ -102,7 +102,7 @@ class SignIn extends Component {
               value={signInPass}
               onChange={this.HandleInputChangeSignInPass} />
             <br />
-            <button id="signin" onClick={this.onSignIn}>Sign In</button>
+            <button type="button" className="btn btn-sucess" id="signin" onClick={this.onSignIn}>Sign In</button>
           </form>
           {fireRedirect && (
             <Redirect to={'/profile'} />
