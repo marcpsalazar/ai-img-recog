@@ -6,7 +6,7 @@ import { List, ListItem } from "../../components/List";
 import Container from "../../components/Container";
 import Header from "../../components/Header";
 import Cropper from 'react-cropper'
-import TestImageUpload from  "../../components/TestImageUpload";
+import TestImageUpload from "../../components/TestImageUpload";
 import ProfilePhotos from "../../components/ProfilePhotos";
 import Footer from "../../components/Footer";
 import API from "../../utils/API";
@@ -19,7 +19,7 @@ class Profile extends Component {
     this.state = {
       isLoading: true,
       token: '',
-      trees: [],  
+      trees: [],
       selectedFile: null,
       croppedFile: null,
       src: null,
@@ -33,154 +33,159 @@ class Profile extends Component {
   }
 
   //Marcus
-    componentDidMount() {
-      const obj = getFromStorage('the_main-app');
-      if (obj && obj.token) {
-        const { token } = obj;
-        API.verify(token);
-        this.loadTrees(token);
-        this.setState ({
-          token,
-          isLoading: false,
-          fireRedirect: false
-        });
-      } else {
-        this.setState ({
-          fireRedirect: true
-        })
-      }
-
-    }
-
-    loadTrees = (token) => {
-      console.log("hello");
-      API.getTrees(token)
-        .then(res => {
-          console.log(res);
-          this.setState({ trees: res.data});
-          console.log(this.state.trees);
-        })
-        .catch(err => console.log(err));
-    }
-
-    logout(e) {
-      e.preventDefault()
+  componentDidMount() {
+    const obj = getFromStorage('the_main-app');
+    if (obj && obj.token) {
+      const { token } = obj;
+      API.verify(token);
+      this.loadTrees(token);
       this.setState({
+        token,
         isLoading: false,
-        token:'',
-        user_id: ''
+        fireRedirect: false
       });
+    } else {
+      this.setState({
+        fireRedirect: true
+      })
+    }
 
-      console.log("button clicked");
-      const obj = getFromStorage('the_main-app');
+  }
 
-      if (obj && obj.token) {
-        const { token } = obj;
 
-        API.logOut(token)
+  loadTrees = (token) => {
+    console.log("hello");
+    API.getTrees(token)
+      .then(res => {
+        console.log(res);
+        this.setState({ trees: res.data });
+        console.log(this.state.trees);
+      })
+      .catch(err => console.log(err));
+  }
+
+  logout(e) {
+    e.preventDefault()
+    this.setState({
+      isLoading: false,
+      token: '',
+      user_id: ''
+    });
+
+    console.log("button clicked");
+    const obj = getFromStorage('the_main-app');
+
+    if (obj && obj.token) {
+      const { token } = obj;
+
+      API.logOut(token)
         .then(json => {
-          if (json.statusText==="OK") {
-            setInStorage('the_main-app', { token: ""});
-            this.setState({fireRedirect: true});
+          if (json.statusText === "OK") {
+            setInStorage('the_main-app', { token: "" });
+            this.setState({ fireRedirect: true });
           }
         });
-      }
     }
+  }
+
+
   //---*
 
   //Darwin
-    // Function to get file type from base64 string
-    imageFileExtensionFromBase64 = base64Data => {
-      return base64Data.substring('data:image/'.length, base64Data.indexOf(';base64'));
-    }
+  // Function to get file type from base64 string
+  imageFileExtensionFromBase64 = base64Data => {
+    return base64Data.substring('data:image/'.length, base64Data.indexOf(';base64'));
+  }
 
-    // Function to convert base64 string and file name into file
-    base64StringtoFile = (base64String, fileName) => {
-      var arr = base64String.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
-      return new File([u8arr], fileName, {type: mime});
+  // Function to convert base64 string and file name into file
+  base64StringtoFile = (base64String, fileName) => {
+    var arr = base64String.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
     }
+    return new File([u8arr], fileName, { type: mime });
+  }
 
-    // Update state to catch file provided from client
-    fileChangedHandler = event => {
-      this.setState({selectedFile: event.target.files[0]});
-    }
+  // Update state to catch file provided from client
+  fileChangedHandler = event => {
+    this.setState({ selectedFile: event.target.files[0] });
+  }
 
-    // Function to reset image submission form
-    resetForm = () => {
-      document.getElementById("leaf-submit").reset();
-      this.setState({ selectedFile: null,
-          croppedFile: null,
-          src: null,
-          cropResult: null,
-          displayImageCropper: "none",
-          displayCropButton: "none",
-          displayCroppedImage: "none",
-          displaySubmit: "none"});
-    }
+  // Function to reset image submission form
+  resetForm = () => {
+    document.getElementById("leaf-submit").reset();
+    this.setState({
+      selectedFile: null,
+      croppedFile: null,
+      src: null,
+      cropResult: null,
+      displayImageCropper: "none",
+      displayCropButton: "none",
+      displayCroppedImage: "none",
+      displaySubmit: "none"
+    });
+  }
 
-    // Function to handle image upload to server
-    uploadHandler = () => {
-      const obj = getFromStorage('the_main-app');
-      // If there's no cropped file, throw error
-      if (!this.state.croppedFile) {
-        alert("Please provide a photo")
-      } else { // Otherwise submit cropped file to server
-        const { token } = obj;
-        const formData = new FormData()
-        formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
-        API.postImage(token, formData) 
-          .then(function(res) {
-            console.log(res.data);
+  // Function to handle image upload to server
+  uploadHandler = () => {
+    const obj = getFromStorage('the_main-app');
+    // If there's no cropped file, throw error
+    if (!this.state.croppedFile) {
+      alert("Please provide a photo")
+    } else { // Otherwise submit cropped file to server
+      const { token } = obj;
+      const formData = new FormData()
+      formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
+      API.postImage(token, formData)
+        .then(function (res) {
+          console.log(res.data);
         });
-        this.resetForm();
-      }
+      this.resetForm();
     }
+  }
 
-    // Function to display file provided by user in image cropper
-    onSelectFile = event => {
-      event.preventDefault();
-      let files;
-      if (event.dataTransfer) {
-        files = event.dataTransfer.files;
-      } else if (event.target) {
-        files = event.target.files;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.setState({ src: reader.result, displayImageCropper: "block", displayCropButton: "block", displayCroppedImage: "none", displaySubmit: "none" });
-      };
-      reader.readAsDataURL(files[0]);
+  // Function to display file provided by user in image cropper
+  onSelectFile = event => {
+    event.preventDefault();
+    let files;
+    if (event.dataTransfer) {
+      files = event.dataTransfer.files;
+    } else if (event.target) {
+      files = event.target.files;
     }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: reader.result, displayImageCropper: "block", displayCropButton: "block", displayCroppedImage: "none", displaySubmit: "none" });
+    };
+    reader.readAsDataURL(files[0]);
+  }
 
-    // Function to crop image
-    cropImage = event => {
-      event.preventDefault();
-      if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
-        return;
-      }
-      this.setState({
-        cropResult: this.cropper.getCroppedCanvas({height: 666}).toDataURL('image/jpeg'),
-        displayImageCropper: "none",
-        displayCropButton: "none",
-        displayCroppedImage: "block",
-        displaySubmit: "block"
-      });
+  // Function to crop image
+  cropImage = event => {
+    event.preventDefault();
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
+      return;
     }
+    this.setState({
+      cropResult: this.cropper.getCroppedCanvas({ height: 666 }).toDataURL('image/jpeg'),
+      displayImageCropper: "none",
+      displayCropButton: "none",
+      displayCroppedImage: "block",
+      displaySubmit: "block"
+    });
+  }
 
-    // Function to create file from cropped image and upload
-    handleImageUpload = event => {
-      event.preventDefault();
-      const cropBase64 = this.state.cropResult;
-      const fileExt = this.imageFileExtensionFromBase64(cropBase64);
-      const fileName = `photo.${fileExt}`;
-      this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) },
-        this.uploadHandler
-      );
-    }
+  // Function to create file from cropped image and upload
+  handleImageUpload = event => {
+    event.preventDefault();
+    const cropBase64 = this.state.cropResult;
+    const fileExt = this.imageFileExtensionFromBase64(cropBase64);
+    const fileName = `photo.${fileExt}`;
+    this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) },
+      this.uploadHandler
+    );
+  }
   //---*
 
   render() {
@@ -200,7 +205,7 @@ class Profile extends Component {
             displayCropButton={this.state.displayCropButton}
             displaySubmit={this.state.displaySubmit}
           />
-          <div style={{display: this.state.displayImageCropper}}>
+          <div style={{ display: this.state.displayImageCropper }}>
             <Cropper
               style={{ height: 300, width: '50%' }}
               aspectRatio={1 / 1}
@@ -218,31 +223,41 @@ class Profile extends Component {
           <List>
             {this.state.trees.map(tree => (
               <ListItem key={tree._id}>
-                  <strong>
-                    {tree.name}
-                  </strong>
-                  <i>
-                    {tree.sciName}
-                  </i>
-                  <img src={tree.path} />
-                  <img src={tree.range} />
+                  <div class="row">
+                    <div class="col-md-3">
+                      <i>
+                        <strong>{tree.name}</strong>
+                        <p>{tree.sciName}</p>
+                      </i>
+                    </div>
+                    <div class="col-md-3">
+                      <img src={tree.path} />
+                    </div>
+                    <div class="col-md-3">
+                      <img src={tree.range} />
+                    </div>
+                    <div class="col-md-1"></div>
+                  </div>
+
+
                 {/* <DeleteBtn/> */}
               </ListItem>
             ))}
-        </List> )
-          : ( <ProfilePhotos />
-        )}
+          </List>)
+          : (<ProfilePhotos />
+          )}
         <button id="logout" type="button" className="btn btn-success"
-        onClick={this.logout}>
-            Log Out
+          onClick={this.logout}>
+          Log Out
         </button>
         <Footer />
         {fireRedirect && (
-          <Redirect to={!this.state.token ? '/' : '/profile' }/>
-          )}
+          <Redirect to={!this.state.token ? '/' : '/profile'} />
+        )}
       </Container>
     );
   }
 }
+
 
 export default Profile;

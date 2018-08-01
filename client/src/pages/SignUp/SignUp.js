@@ -3,20 +3,23 @@ import { Redirect } from "react-router";
 import "./SignUp.css";
 import Input from "../../components/Input";
 import API from "../../utils/API";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import Container from "../../components/Container";
 
 class SignUp extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-          token: '',
-          signUpUser: '',
-          signUpPass: '',
-          fireRedirect: false
-      }
+    super(props);
+    this.state = {
+      token: '',
+      signUpUser: '',
+      signUpPass: '',
+      fireRedirect: false
+    }
 
-      this.HandleInputChangeSignUpUser = this.HandleInputChangeSignUpUser.bind(this);
-      this.HandleInputChangeSignUpPass = this.HandleInputChangeSignUpPass.bind(this);
-      this.onSignUp = this.onSignUp.bind(this);
+    this.HandleInputChangeSignUpUser = this.HandleInputChangeSignUpUser.bind(this);
+    this.HandleInputChangeSignUpPass = this.HandleInputChangeSignUpPass.bind(this);
+    this.onSignUp = this.onSignUp.bind(this);
   }
 
   HandleInputChangeSignUpUser(event) {
@@ -33,7 +36,7 @@ class SignUp extends Component {
 
   onSignUp(e) {
     e.preventDefault()
-    this.setState({fireRedirect: true});
+    this.setState({ fireRedirect: true });
     const {
       signUpUser,
       signUpPass
@@ -52,31 +55,37 @@ class SignUp extends Component {
       signUpPass,
       fireRedirect
     } = this.state;
-    const { from } = this.props.location.state || '/';
+    const { from } = this.props.location.state || '/'
 
     return (
-      <div>
-        <form className="signUp-form">
-            <h3 className="signup-heading"> Create a Profile </h3>
+      <Container fluid>
+        <div className="background-image">
+          <Header />
+          <form className="signUp-form">
+            <h1 className="signup-heading"> Create a Profile </h1>
             <Input
-                type="text"
-                placeholder="Username"
-                value={signUpUser}
-                onChange={this.HandleInputChangeSignUpUser}/>
+              type="text"
+              placeholder="Username"
+              value={signUpUser}
+              onChange={this.HandleInputChangeSignUpUser} />
             <Input
-                type="password"
-                placeholder="Password"
-                value={signUpPass}
-                onChange={this.HandleInputChangeSignUpPass}/>
+              type="password"
+              placeholder="Password"
+              value={signUpPass}
+              onChange={this.HandleInputChangeSignUpPass} />
             <br />
-            <button onClick={this.onSignUp}>Sign Up</button>
-        </form>
-        {fireRedirect && (
-          <Redirect to={'/signin'}/>
+            <button type="button" className="btn btn-sucess" id="signup" onClick={this.onSignUp}>Sign Up</button>
+          </form>
+          {fireRedirect && (
+            <Redirect to={'/signin'} />
           )}
-      </div>
-      );
+          <Footer />
+        </div>
+      </Container>
+    );
   }
 }
+
+
 
 export default SignUp;
