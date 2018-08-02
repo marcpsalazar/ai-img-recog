@@ -11,8 +11,6 @@
     font-size: 24px;
     /* border: solid 3px darkgray; */
     display: inline-block;
-
-
 }
 
 .form-group label {
@@ -24,4 +22,15 @@
 .form-group input {
     font-size: 28px;
     padding-top: 15px; 
+}
+
+#FormControl {
+    color: red;
+    position: absolute;
+    top: 60px;
+}
+
+#upload {
+    position: absolute;
+    bottom: 65px;
 }
