@@ -41,7 +41,7 @@
 }
 
 #signin {
-    margin-left:220px;
+    margin-left: 38%;
     background-color: rgb(54, 131, 54);
     color:white;
     margin-top: 0px;
@@ -51,7 +51,7 @@
 
 .signInPage {
     background-image: url("../../images//leaves-background.jpeg");
-    background-color: rgb(238, 237, 237);    
+    background-color: rgb(238, 237, 237);
     background-size: cover;
     width: 100%;
 }

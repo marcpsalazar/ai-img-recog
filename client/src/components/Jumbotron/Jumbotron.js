@@ -12,14 +12,11 @@ const Jumbotron = props => (
 
        <hr className="my-4" />
 
-
-      < LogInBtn >
-        Log
-      </ LogInBtn>
       
-      < SignUpBtn >
-        Sign In
-      </ SignUpBtn>
+      <LogInBtn />
+      <SignUpBtn />
+
+
     </div>
 );
 
