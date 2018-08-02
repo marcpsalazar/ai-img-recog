@@ -230,7 +230,7 @@ class Profile extends Component {
           
           <div className="directions">
             <p>Submit a photo of a leaf to the image uploader. Utilizing image recognition technology,
-              Leafy will return the common name, scientific name, and geographic range or your leaf, if a
+              Leafy will return the common name, scientific name, and geographic range of your tree, if a
               match is found.</p>
           </div>
           
