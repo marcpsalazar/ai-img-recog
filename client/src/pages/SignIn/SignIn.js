@@ -5,7 +5,7 @@ import Input from "../../components/Input";
 import API from "../../utils/API";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import Container from "../../components/Container";
+
 import "./SignIn.css";
 
 
@@ -109,7 +109,7 @@ class SignIn extends Component {
               <Redirect to={'/profile'} />
             )}
             <Footer />
-         
+
         {/* </Container> */}
       </div>
     );

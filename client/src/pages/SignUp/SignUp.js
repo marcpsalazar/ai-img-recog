@@ -5,7 +5,7 @@ import Input from "../../components/Input";
 import API from "../../utils/API";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import Container from "../../components/Container";
+
 
 class SignUp extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class SignUp extends Component {
       signUpPass,
       fireRedirect
     } = this.state;
-    const { from } = this.props.location.state || '/'
+    
 
     return (
       // <Container fluid>
