@@ -9,48 +9,25 @@ If you'd like to contribute to our efforts, we are actively looking for contribu
 
 On the front-end, Leafy is driven by React and interfaces with a Node/Express server and Mongo database. In order to enable user image submission, we used react-cropper to allow users to create base64 square croppings of their image. We then generate a .jpg image file from the base64 cropping, which is submitted to the server. Doing so had the dual benefit of standardizing image dimensions for rendering purposes later on and also reducing image file size for upload. 
 
-At the server, the user submitted image is stored in an AWS S3 bucket. The path to the AWS stored image is then sent to a custom-trained IBM Watson visual recognition instance for analysis. Upon analysis completion from Watson, a database insert is made capturing the AWS path, Watson results, and metadata corresponding to the image such as name, scientific name, and range image path information. 
+At the server, the user submitted image is stored in an AWS S3 bucket. The path to the AWS stored image is then sent to a custom-trained IBM Watson visual recognition instance for analysis. Upon analysis completion from Watson, a database insert is made capturing the AWS path, Watson results, and metadata corresponding to the image such as name, scientific name, and range image path information. Lastly, the resulting database insert is returned to the client for rendering.
 
-  https://aframe.io/
+Please see below for further information about the technologies used in this project:
+
+  https://github.com/roadmanfong/react-cropper
   
-  https://github.com/jeromeetienne/AR.js/blob/master/README.md
-
-## Gameplay Instructions
-
-In order to play xoAR in AR mode, the Hiro AR marker provided under the oxAR "AR Marker" window needs to be utilized. 
-
-For example, on a first computing device, maybe your deskptop/laptop, pull up the Hiro AR Marker. On a second computing device such as your mobile phone, pull up the xoAR "AR Tic-Tac-Toe" window. Upon doing so, you will be asked if xoAR can use your camera - select OK - then point your camera at the Hiro AR Marker on the first computing device. The AR Tic-Tac-Toe gameboard will be rendered on your mobile device! You can then touch the rendered AR planes in order to make your move. 
-
-Such steps may also be inverted so you can play on your desktop/laptop while providing the Hiro AR Marker from your mobile device.
-
-## Gameplay Photos
-
-Mobile
-
-<img width="556" alt="screen shot 2018-05-25 at 11 05 21 am" src="https://user-images.githubusercontent.com/37127765/40551655-977938d4-600b-11e8-8540-66a1b58bfc7e.png">
-
-<img width="649" alt="screen shot 2018-05-25 at 11 07 50 am" src="https://user-images.githubusercontent.com/37127765/40551804-f499a5f8-600b-11e8-904e-fa17734012a2.png">
-
-Laptop
-
-<img width="1435" alt="screen shot 2018-05-25 at 10 56 13 am" src="https://user-images.githubusercontent.com/37127765/40551401-cda65028-600a-11e8-8461-75bf6261b70a.png">
+  https://www.ibm.com/watson/services/visual-recognition/
   
-## Link
 
-Visit on GitHub:
+## Instructions
 
-```sh
-https://nchenari.github.io/ar-tic-tac-toe/index.html
-```
+In order to use Leafy, you first must create an accout. This allows us to associate your submitted images with your account and return them to you upon accessing the profile page. 
 
+Once on the profile page, simply upload an image which you wish to be identified. Leafy will request that you take a square cropping of the image. Don't fret if you cannot get the whole image in the sqaure cropping, but just make sure that you get as many prominent features of your leaf in the cropping. Next, hit crop then submit and Leafy will do the remainder of the work behind the scenes. The results will be dynamically generated when ready!
+  
 ## Contributing
 
-1. Fork it (<https://github.com/nchenari/ar-tic-tac-toe>)
+1. Fork it (<https://github.com/deasydoesit/ai-img-recog>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-
-
-Collapse 
+5. Create a new Pull Request 
