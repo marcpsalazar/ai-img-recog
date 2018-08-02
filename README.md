@@ -1,7 +1,7 @@
 # Leafy
 > Discovery: From Leaf to Tree. You find a leaf and we'll do the rest!
 
-Leafy is a full stack, MERN application that identifies user submitted leaves. A user may post a picture of a leaf that they've come across and Leafy will perform image recognition analysis on the image to identify what species of tree to which the leaf belongs. Currently, Leafy serves as a minimum viable product / proof of concept as it is able to seamlessly identify a select quantity of trees (e.g., Eastern redbud, Ginkgo, Pine, Southern Magnolia, and Swamp White Oak) focalized around the Washington, D.C. region. It is our intention to continue to train the image recognition analysis engine to identify a greater variety of species in our local area, then exapnd into additional regions. 
+Leafy is a full stack, MERN application that identifies user submitted leaves. A user may post a picture of a leaf that they've come across and Leafy will perform image recognition analysis on the image to identify what species of tree to which the leaf belongs. Currently, Leafy serves as a minimum viable product / proof of concept as it is able to seamlessly identify a select quantity of trees (e.g., Eastern redbud, Ginkgo, Pine, Southern Magnolia, and Swamp White Oak) focalized around the Washington, D.C. region. It is our intention to continue to train the image recognition analysis engine to identify a greater variety of species in our local area, then expand into additional regions. 
 
 If you'd like to contribute to our efforts, we are actively looking for contributors to help us expand our identification capabilities! To do so, just submit a .zip file comprising 25-30 images of your particular tree species in .jpg/.png format with a minimum resolution of 250 x 250 px. Please name your .zip file with the following semantic convention and specify the common name of the tree (e.g., american_sycamore.zip, ginkgo.zip, swamp_white_oak.zip, etc.) and we'll handle retraining our image recognition analysis engine.
 
@@ -20,9 +20,9 @@ Please see below for further information about the technologies used in this pro
 
 ## Instructions
 
-In order to use Leafy, you first must create an accout. This allows us to associate your submitted images with your account and return them to you upon accessing the profile page. 
+In order to use Leafy, you first must create an account. This allows us to associate your submitted images with your account and return them to you upon accessing the profile page. 
 
-Once on the profile page, simply upload an image which you wish to be identified. Leafy will request that you take a square cropping of the image. Don't fret if you cannot get the whole image in the sqaure cropping, but just make sure that you get as many prominent features of your leaf in the cropping. Next, hit crop then submit and Leafy will do the remainder of the work behind the scenes. The results will be dynamically generated when ready!
+Once on the profile page, simply upload an image which you wish to be identified. Leafy will request that you take a square cropping of the image. Don't fret if you cannot get the whole image in the square cropping, but just make sure that you get as many prominent features of your leaf in the cropping. Next, hit crop then submit and Leafy will do the remainder of the work behind the scenes. The results will be dynamically generated when ready!
   
 ## Contributing
 
