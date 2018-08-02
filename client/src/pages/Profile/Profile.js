@@ -130,8 +130,10 @@ class Profile extends Component {
       const formData = new FormData()
       formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
       API.postImage(token, formData)
-        .then(function (res) {
-          console.log(res.data);
+        .then( res => {
+          let newTreesArray = this.state.trees;
+          newTreesArray.unshift(res.data);
+          this.setState({ trees: newTreesArray });
         });
       this.resetForm();
     }
