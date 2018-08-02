@@ -58,8 +58,8 @@ class SignUp extends Component {
     const { from } = this.props.location.state || '/'
 
     return (
-      <Container fluid>
-        <div className="background-image">
+      // <Container fluid>
+      <div className="signUpPage">
           <Header />
           <form className="signUp-form">
             <h1 className="signup-heading"> Create a Profile </h1>
@@ -81,7 +81,7 @@ class SignUp extends Component {
           )}
           <Footer />
         </div>
-      </Container>
+      // </Container>
     );
   }
 }

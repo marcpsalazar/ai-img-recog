@@ -16,7 +16,7 @@ const Jumbotron = props => (
       < LogInBtn >
         Log
       </ LogInBtn>
-
+      
       < SignUpBtn >
         Sign In
       </ SignUpBtn>

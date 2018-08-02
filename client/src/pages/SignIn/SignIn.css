@@ -1,8 +1,8 @@
 .signIn-form {
     width: 700px;
     height: 400px;
-    /* background-color: whitesmoke; */
-    background-image: url("../../images/notebook.png");
+    background-color: whitesmoke;
+    /* background-image: url("../../images/notebook.png"); */
     border: rgb(34, 82, 30);
     border-style: solid;
   margin-left: auto;
@@ -49,13 +49,9 @@
     font-family: 'Fredericka the Great', cursive;
 }
 
-.background-image {
-    background-image: url("../../images/leaves-background.jpeg");
+.signInPage {
+    background-image: url("../../images//leaves-background.jpeg");
+    background-color: rgb(238, 237, 237);    
     background-size: cover;
     width: 100%;
-}
-
-.signInPage {
-    /* height: 1000px; */
-    background-image: url("../../images//leaves-background.jpeg")
 }
