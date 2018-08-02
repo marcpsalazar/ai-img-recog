@@ -12,6 +12,7 @@ import Footer from "../../components/Footer";
 import API from "../../utils/API";
 import "./Profile.css";
 import 'cropperjs/dist/cropper.css';
+import { inflate } from "zlib";
 
 class Profile extends Component {
   constructor(props) {
@@ -196,7 +197,8 @@ class Profile extends Component {
     return (
       <Container fluid>
         <Header />
-        <div>
+        <div className="row">
+        <div className="col-md-5">
           <TestImageUpload
             fileChangedHandler={this.fileChangedHandler}
             handleImageUpload={this.handleImageUpload}
@@ -205,6 +207,8 @@ class Profile extends Component {
             displayCropButton={this.state.displayCropButton}
             displaySubmit={this.state.displaySubmit}
           />
+          </div>
+          <div className="cropper col-md-7">
           <div style={{ display: this.state.displayImageCropper }}>
             <Cropper
               style={{ height: 300, width: '50%' }}
@@ -216,27 +220,32 @@ class Profile extends Component {
               viewMode={2}
               zoomable={false}
             />
-          </div>
-          <img style={{ height: 333, display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
+            </div> 
+            </div>
+              <img style={{ height: 333, position: "absolute", top: "200px", left: "500px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
+
+          
+         
+        
         </div>
         {this.state.trees.length ? (
           <List>
             {this.state.trees.map(tree => (
               <ListItem key={tree._id}>
-                  <div class="row">
-                    <div class="col-md-3">
+                  <div className="row">
+                    <div className="col-md-3">
                       <i>
                         <strong>{tree.name}</strong>
                         <p>{tree.sciName}</p>
                       </i>
                     </div>
-                    <div class="col-md-3">
+                    <div className="col-md-3">
                       <img src={tree.path} />
                     </div>
-                    <div class="col-md-3">
+                    <div className="col-md-3">
                       <img src={tree.range} />
                     </div>
-                    <div class="col-md-1"></div>
+                    <div className="col-md-1"></div>
                   </div>
 
 

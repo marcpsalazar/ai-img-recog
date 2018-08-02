@@ -83,7 +83,9 @@ class SignIn extends Component {
       fireRedirect
     } = this.state;
       return (
-        <div>
+        <div className="signInPage">
+          {/* <Container> */}
+            <Header/>
             <form className="signIn-form">
                 <h3 className="signin-heading"> Hello </h3>
                 <Input
@@ -107,8 +109,8 @@ class SignIn extends Component {
               <Redirect to={'/profile'} />
             )}
             <Footer />
-          </div>
-        </Container>
+         
+        {/* </Container> */}
       </div>
     );
   }

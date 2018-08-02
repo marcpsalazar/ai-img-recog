@@ -26,3 +26,7 @@ div.list-overflow-container {
 img {
   height: 200px;
 }
+
+.cropper {
+    margin-top: 10%;
+}
