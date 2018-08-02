@@ -34,12 +34,11 @@ class Profile extends Component {
   }
 
   //Marcus
-  componentDidMount() {
+  componentDidMount = () => {
     const obj = getFromStorage('the_main-app');
+    const { token } = obj;
     if (obj && obj.token) {
-      const { token } = obj;
       API.verify(token);
-      this.loadTrees(token);
       this.setState({
         token,
         isLoading: false,
@@ -50,17 +49,13 @@ class Profile extends Component {
         fireRedirect: true
       })
     }
-
+    this.loadTrees(token);
   }
 
-
-  loadTrees = (token) => {
-    console.log("hello");
+  loadTrees = token => {
     API.getTrees(token)
       .then(res => {
-        console.log(res);
         this.setState({ trees: res.data });
-        console.log(this.state.trees);
       })
       .catch(err => console.log(err));
   }
@@ -73,7 +68,6 @@ class Profile extends Component {
       user_id: ''
     });
 
-    console.log("button clicked");
     const obj = getFromStorage('the_main-app');
 
     if (obj && obj.token) {
@@ -88,8 +82,6 @@ class Profile extends Component {
         });
     }
   }
-
-
   //---*
 
   //Darwin
@@ -139,8 +131,10 @@ class Profile extends Component {
       const formData = new FormData()
       formData.append('photo', this.state.croppedFile, this.state.croppedFile.fileName);
       API.postImage(token, formData)
-        .then(function (res) {
-          console.log(res.data);
+        .then( res => {
+          let newTreesArray = this.state.trees;
+          newTreesArray.unshift(res.data);
+          this.setState({ trees: newTreesArray });
         });
       this.resetForm();
     }
@@ -247,13 +241,12 @@ class Profile extends Component {
                     </div>
                     <div className="col-md-1"></div>
                   </div>
-
-
                 {/* <DeleteBtn/> */}
               </ListItem>
-            ))}
-          </List>)
-          : (<ProfilePhotos />
+           ))}
+          </List>
+          ) : (
+          <ProfilePhotos />
           )}
         <button id="logout" type="button" className="btn btn-success"
           onClick={this.logout}>

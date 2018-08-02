@@ -47,11 +47,14 @@ let upload = multer({
 module.exports = function (app) {
 
   // Function 
-  app.get('/api/user/:token', function(req, res) {
-    db.UserSession.find({_id: req.params.token})
+  app.get('/api/user_trees/:token', function(req, res) {
+    console.log(req.params.token);
+    console.log(mongoose.Types.ObjectId(req.params.token));
+    db.UserSession.find({_id: mongoose.Types.ObjectId(req.params.token)}) //req.params.token
         .then(function(session) {
           db.Post.find({user_id: session[0].userId})
             .then(function(trees) {
+              console.log("hello");
               res.send(trees);
             })
             .catch(function(err) {
@@ -68,7 +71,7 @@ module.exports = function (app) {
 
       let token = req.params.token; 
       let user_id = '';
-      db.UserSession.find({_id: token})
+      db.UserSession.find({_id: mongoose.Types.ObjectId(req.params.token)})
         .then(function(res) {
           console.log(res);
           user_id = res[0].userId;

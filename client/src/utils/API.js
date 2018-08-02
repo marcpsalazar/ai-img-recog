@@ -23,7 +23,7 @@ export default {
   },
 
   getTrees: function(token) {
-    return axios.get('/api/user/' + token);
+    return axios.get('/api/user_trees/' + token);
   }
 
 };
