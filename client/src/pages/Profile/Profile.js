@@ -265,10 +265,10 @@ class Profile extends Component {
                       </i>
                     </div>
                     <div className="col-md-3">
-                      <img src={tree.path} />
+                      <img src={tree.path} alt="submitted leaf"/>
                     </div>
                     <div className="col-md-3">
-                      <img src={tree.range} />
+                      <img src={tree.range} alt="geographical range"/>
                     </div>
                     <div className="col-md-1"></div>
                   </div>
