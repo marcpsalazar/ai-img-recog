@@ -3,7 +3,6 @@ import { Redirect } from "react-router";
 import { getFromStorage } from '../../utils/storage';
 import { setInStorage } from '../../utils/storage';
 import { List, ListItem } from "../../components/List";
-
 import Header from "../../components/Header";
 import Cropper from 'react-cropper'
 import TestImageUpload from "../../components/TestImageUpload";
@@ -12,8 +11,6 @@ import Footer from "../../components/Footer";
 import API from "../../utils/API";
 import "./Profile.css";
 import 'cropperjs/dist/cropper.css';
-// import Loading from "../../components/Loading"
-
 import garland from "../../images/garland.png";
 
 class Profile extends Component {
@@ -30,8 +27,7 @@ class Profile extends Component {
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "none",
-      displaySubmit: "none",
-      // displayLoading: "none"
+      displaySubmit: "none"
     };
     this.logout = this.logout.bind(this);
   }
@@ -119,8 +115,7 @@ class Profile extends Component {
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "none",
-      displaySubmit: "none",
-      // displayLoading: "block"
+      displaySubmit: "none"
     });
   }
 
@@ -139,20 +134,11 @@ class Profile extends Component {
           let newTreesArray = this.state.trees;
           newTreesArray.unshift(res.data);
           this.setState({ trees: newTreesArray });
-
-//           function loadPage() {
-//  const load = document.getElementsByClassName("loader-wrapper");
-//           load.style.display = "block";
-//           console.log("Loading");
-
-//           }
-
         });
       this.resetForm();
     }
 
   }
-
 
   //---*
 
@@ -220,7 +206,6 @@ class Profile extends Component {
             cropImage={this.cropImage}
             displayCropButton={this.state.displayCropButton}
             displaySubmit={this.state.displaySubmit}
-            // displayLoading={this.state.displayLoading}
           />
           </div>
 
@@ -236,7 +221,7 @@ class Profile extends Component {
 
           <div style={{ display: this.state.displayImageCropper }}>
             <Cropper
-              style={{ height: 300, width: '50%' }}
+              style={{ height: "450px", width: "150%" }}
               aspectRatio={1 / 1}
               guides={false}
               src={this.state.src}
@@ -245,9 +230,13 @@ class Profile extends Component {
               viewMode={2}
               zoomable={false}
             />
+
+
+
             </div>
+
             </div>
-              <img style={{ height: 333, position: "absolute", top: "200px", left: "500px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" />
+              <img style={{ height: 700, position: "absolute", top: "80px", left: "300px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" id="cropped" />
         </div>
 
         <p className="collectionTitle">Your Leaf Collection</p>
@@ -272,7 +261,6 @@ class Profile extends Component {
                     </div>
                     <div className="col-md-1"></div>
                   </div>
-                {/* <DeleteBtn/> */}
               </ListItem>
            ))}
           </List>
