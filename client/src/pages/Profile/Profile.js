@@ -253,7 +253,7 @@ class Profile extends Component {
 
         <div id="loader">
         <p>Searching the database . . .</p>
-        <img src={loader}></img>
+        <img src={loader} alt="Spinning leaves"></img>
         </div>
         <div id="loaderBackground"></div>
 
