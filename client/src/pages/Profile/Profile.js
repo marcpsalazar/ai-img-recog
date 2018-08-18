@@ -248,7 +248,7 @@ class Profile extends Component {
             </div>
           </div>
               
-          <img style={{ height: 700, position: "absolute", top: "80px", left: "300px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" id="cropped" />
+          <img style={{ height: 600, position: "absolute", top: "80px", left: "300px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" id="cropped" />
         </div>
 
         <div id="loader">
