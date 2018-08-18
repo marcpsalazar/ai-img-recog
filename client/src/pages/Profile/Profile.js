@@ -12,6 +12,7 @@ import API from "../../utils/API";
 import "./Profile.css";
 import 'cropperjs/dist/cropper.css';
 import garland from "../../images/garland.png";
+import loader from "../../images/loader.gif"
 
 class Profile extends Component {
   constructor(props) {
@@ -177,13 +178,21 @@ class Profile extends Component {
   // Function to create file from cropped image and upload
   handleImageUpload = event => {
     event.preventDefault();
+    showLoading();
     const cropBase64 = this.state.cropResult;
     const fileExt = this.imageFileExtensionFromBase64(cropBase64);
     const fileName = `photo.${fileExt}`;
     this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) },
       this.uploadHandler
     );
+
+  // Function to add loader
+  function showLoading() {
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("loaderBackground").style.display = "block";
+}
   }
+
 
   //---*
 
@@ -198,54 +207,58 @@ class Profile extends Component {
 
         <Header />
         <div className="row">
-        <div className="col-md-5">
-          <TestImageUpload
-            fileChangedHandler={this.fileChangedHandler}
-            handleImageUpload={this.handleImageUpload}
-            onSelectFile={this.onSelectFile}
-            cropImage={this.cropImage}
-            displayCropButton={this.state.displayCropButton}
-            displaySubmit={this.state.displaySubmit}
-          />
+          <div className="col-md-5">
+            <TestImageUpload
+              fileChangedHandler={this.fileChangedHandler}
+              handleImageUpload={this.handleImageUpload}
+              onSelectFile={this.onSelectFile}
+              cropImage={this.cropImage}
+              displayCropButton={this.state.displayCropButton}
+              displaySubmit={this.state.displaySubmit}
+            />
           </div>
 
           <div className="cropper col-md-7">
 
-          <img className="garland" src={garland} alt="Leaf garland"/>
+            <img className="garland" src={garland} alt="Leaf garland"/>
 
-          <div className="directions">
-            <p>Submit a photo of a leaf to the image uploader. Utilizing image recognition technology,
-              Leafy will return the common name, scientific name, and geographic range of your tree, if a
-              match is found.</p>
+            <div className="directions">
+              <p>Submit a photo of a leaf to the image uploader. Utilizing image recognition technology,
+                Leafy will return the common name, scientific name, and geographic range of your tree, if a
+                match is found.</p>
+            </div>
+
+            <div style={{ display: this.state.displayImageCropper }}>
+              <Cropper
+                style={{ height: "450px", width: "150%" }}
+                aspectRatio={1 / 1}
+                guides={false}
+                src={this.state.src}
+                ref={cropper => { this.cropper = cropper; }}
+                background={false}
+                viewMode={2}
+                zoomable={false}
+              />
+            </div>
           </div>
-
-          <div style={{ display: this.state.displayImageCropper }}>
-            <Cropper
-              style={{ height: "450px", width: "150%" }}
-              aspectRatio={1 / 1}
-              guides={false}
-              src={this.state.src}
-              ref={cropper => { this.cropper = cropper; }}
-              background={false}
-              viewMode={2}
-              zoomable={false}
-            />
-
-
-
-            </div>
-
-            </div>
-              <img style={{ height: 700, position: "absolute", top: "80px", left: "300px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" id="cropped" />
+              
+          <img style={{ height: 700, position: "absolute", top: "80px", left: "300px", display: this.state.displayCroppedImage }} src={this.state.cropResult} alt="cropped" id="cropped" />
         </div>
 
+        <div id="loader">
+        <p>Searching the database . . .</p>
+        <img src={loader}></img>
+        </div>
+        <div id="loaderBackground"></div>
+
         <p className="collectionTitle">Your Leaf Collection</p>
+        
         <div className="savedLeafs">
 
-        {this.state.trees.length ? (
-          <List>
-            {this.state.trees.map(tree => (
-              <ListItem key={tree._id}>
+          {this.state.trees.length ? (
+            <List>
+              {this.state.trees.map(tree => (
+                <ListItem key={tree._id}>
                   <div className="row">
                     <div className="col-md-3">
                       <i>
@@ -253,26 +266,33 @@ class Profile extends Component {
                         <p>{tree.sciName}</p>
                       </i>
                     </div>
+                    
                     <div className="col-md-3">
                       <img src={tree.path} alt="submitted leaf"/>
                     </div>
+                    
                     <div className="col-md-3">
                       <img src={tree.range} alt="geographical range"/>
                     </div>
+                    
                     <div className="col-md-1"></div>
                   </div>
-              </ListItem>
-           ))}
-          </List>
+                </ListItem>
+              ))}
+            </List>
           ) : (
+          
           <ProfilePhotos />
+          
           )}
         </div>
+        
         <button id="logout" type="button" className="btn btn-success"
           onClick={this.logout}>
           Log Out
         </button>
         <Footer />
+        
         {fireRedirect && (
           <Redirect to={!this.state.token ? '/' : '/profile'} />
         )}
