@@ -28,7 +28,8 @@ class Profile extends Component {
       displayImageCropper: "none",
       displayCropButton: "none",
       displayCroppedImage: "none",
-      displaySubmit: "none"
+      displaySubmit: "none",
+      displayloaderBackground: "none"
     };
     this.logout = this.logout.bind(this);
   }
@@ -155,7 +156,7 @@ class Profile extends Component {
     }
     const reader = new FileReader();
     reader.onload = () => {
-      this.setState({ src: reader.result, displayImageCropper: "block", displayCropButton: "block", displayCroppedImage: "none", displaySubmit: "none", displayDirections: "none" });
+      this.setState({ src: reader.result, displayImageCropper: "block", displayCropButton: "block", displayCroppedImage: "none", displaySubmit: "none", displayDirections: "none", displayloaderBackground: "block" });
     };
     reader.readAsDataURL(files[0]);
   }
@@ -185,6 +186,8 @@ class Profile extends Component {
     this.setState({ croppedFile: this.base64StringtoFile(cropBase64, fileName) },
       this.uploadHandler
     );
+
+  // Christina
 
   // Function to add loader
   function showLoading() {
