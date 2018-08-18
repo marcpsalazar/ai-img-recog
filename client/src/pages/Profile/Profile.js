@@ -189,7 +189,13 @@ class Profile extends Component {
   // Function to add loader
   function showLoading() {
     document.getElementById("loader").style.display = "block";
+    setTimeout(function() {
+      document.getElementById("loader").style.display= "none";
+    }, 3000);
     document.getElementById("loaderBackground").style.display = "block";
+    setTimeout(function() {
+      document.getElementById("loaderBackground").style.display = "none";
+    }, 3000);
 }
   }
 
