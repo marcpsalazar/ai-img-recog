@@ -4,11 +4,11 @@
     background-color:whitesmoke;
     border: rgb(34, 82, 30);
     border-style: solid;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 100px;
-  margin-bottom: 60px;
-  opacity: 0.8;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    margin-bottom: 60px;
+    opacity: 0.9;
 }
 
 .form-group {
@@ -34,31 +34,21 @@
 .signup-heading {
     font-family: 'Fredericka the Great', cursive;
     text-align: center;
-    /* font-style: oblique;
-    font-weight: bold; */
-    padding: 10px;
+    padding: 35px 10px 10px 10px;
 }
 
 #signup {
     margin-left: 38%;
     background-color: rgb(54, 131, 54);
     color:white;
-    margin-top: 0px;
+    margin-top: 15px;
     margin-bottom: 15px;
     font-family: 'Fredericka the Great', cursive;
 }
 
-.background-image {
-    background-image: url('../../images/leaves-background.jpeg');
-    background-size: cover;
-    height:100%;
-}
-
 .signUpPage {
-    background-image: url("../../images//leaves-background.jpeg");
+    background-image: url("../../images/leaves.png");
     background-color: rgb(238, 237, 237);
     background-size: cover;
     width: 100%;
 }
-
-/* http://www.sdjgjx.com/up/pc/Leaf%20Background%2027349.jpg */
