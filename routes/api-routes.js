@@ -41,12 +41,12 @@ let upload = multer({
             cb(null, newImage);
         }
     })
-});  
+});
 //---*
 
 module.exports = function (app) {
 
-  // Function 
+  // Function
   app.get('/api/user_trees/:token', function(req, res) {
     console.log(req.params.token);
     console.log(mongoose.Types.ObjectId(req.params.token));
@@ -69,7 +69,7 @@ module.exports = function (app) {
   // Route for image upload to AWS, Watson processing, etc.
   app.post('/api/image/image-upload/:token', upload.single('photo'), function(req, res, next) {
 
-      let token = req.params.token; 
+      let token = req.params.token;
       let user_id = '';
       db.UserSession.find({_id: mongoose.Types.ObjectId(req.params.token)})
         .then(function(res) {
@@ -79,6 +79,7 @@ module.exports = function (app) {
         })
       // Set up Watson parameters
 
+// change to Watson Model Name**
       let image_url =  req.file.location;
       const classifier_ids = ["DefaultCustomModel_1832883370"];
       const threshold = 0.6;
